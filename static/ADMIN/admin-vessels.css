@@ -40,6 +40,8 @@ h6 {
 
 /* ---------- END OF BASE ---------- */
 
+/* ---------- START OF LOADED ---------- */
+
 #loaderWrapper {
   position: fixed;
   z-index: 2000;
@@ -76,6 +78,7 @@ h6 {
     transform: rotate(360deg);
   }
 }
+/* ---------- END OF LOADER ---------- */
 
 .container {
   display: flex;
@@ -85,7 +88,7 @@ h6 {
   overflow-x: hidden;
 }
 
-/* Sidebar Styles */
+/* ---------- START OF SIDEBAR ---------- */
 .sidebar {
   width: 250px;
   background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -277,8 +280,9 @@ h6 {
   font-size: 1.8rem;
   text-align: center;
 }
+/* ---------- END OF SIDEBAR ---------- */
 
-/* Main Content Styles */
+/* ---------- START OF MAIN CONTENT ---------- */
 .main-content {
   flex: 1;
   margin-left: 250px;
@@ -294,6 +298,7 @@ h6 {
   width: calc(100% - 80px);
 }
 
+/* ---------- START OF TOPBAR ---------- */
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -388,7 +393,7 @@ h6 {
   font-weight: 500;
   margin-right: 0.5rem;
 }
-
+/* ---------- END OF TOPBAR ---------- */
 /* Page Content */
 .dashboard-content {
   padding: 1.5rem;
@@ -415,6 +420,7 @@ h6 {
   font-size: 0.95rem;
 }
 
+/* ---------- BUTTON STYLES ---------- */
 .btn {
   display: inline-block;
   padding: 0.7rem 1.2rem;
@@ -452,7 +458,7 @@ h6 {
   background: rgba(30, 58, 138, 0.1);
   transform: none;
 }
-
+/* ---------- END OF BUTTON STYLES ---------- */
 /* Main Content Sections */
 .main-sections {
   display: grid;
@@ -486,7 +492,7 @@ h6 {
   color: var(--primary);
 }
 
-/* Vessels Table */
+/* ---------- START OF VESSEL TABLE ---------- */
 .table-responsive {
   width: 100%;
   overflow-x: auto;
