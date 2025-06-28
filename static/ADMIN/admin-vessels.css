@@ -1,3 +1,4 @@
+/* ---------- BASE ----------- */
 :root {
   --primary: #0a1f44;
   --secondary: #1e3a8a;
@@ -36,6 +37,8 @@ h6 {
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
 }
+
+/* ---------- END OF BASE ---------- */
 
 #loaderWrapper {
   position: fixed;
