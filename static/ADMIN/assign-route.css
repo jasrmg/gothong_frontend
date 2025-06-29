@@ -1,4 +1,4 @@
-/* Reuse the same base styles */
+  // ------------------ START OF BASE CSS ------------------
 :root {
   --primary: #0a1f44;
   --secondary: #1e3a8a;
@@ -26,6 +26,7 @@ body {
   color: var(--primary);
   line-height: 1.6;
 }
+  // ------------------ END OF BASE CSS ------------------
 
 /* Reuse the same sidebar and topbar styles from vessel-activity-log.html */
 .container {
@@ -71,7 +72,7 @@ body {
   padding: 0 1.5rem 1.5rem;
 }
 
-/* Topbar styles */
+  // ------------------ START OF TOPBAR ------------------
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -168,7 +169,9 @@ body {
   color: var(--dark-gray);
 }
 
-/* ----------- ROUTE ASSIGNMENT CONTAINER ----------- */
+  // ------------------ END OF TOPBAR ------------------
+
+/* ----------- START OF ROUTE ASSIGNMENT CONTAINER ----------- */
 
 .route-assignment-container {
   background-color: white;
@@ -227,6 +230,8 @@ span.flatpickr-day.selected {
   color: white;
   border: 1px solid #1e3a8a;
 } */
+
+  // ------------------ END OF FLATPICKR CSS ------------------
 
 .route-form {
   display: grid;
@@ -322,7 +327,7 @@ span.flatpickr-day.selected {
   gap: 1rem;
   margin-top: 2rem;
 }
-
+  // ------------------ BUTTON CSS ------------------
 .btn {
   display: inline-flex;
   align-items: center;
@@ -411,7 +416,7 @@ span.flatpickr-day.selected {
     justify-content: center;
   }
 }
-
+/* ----- SIDEBAR(?) ------ */
 .sidebar-collapsed {
   width: 80px;
 }
@@ -577,7 +582,7 @@ span.flatpickr-day.selected {
 }
 
 .sidebar-collapsed .logo-text,
-.sidebar-collapsed .nav-link span {
+.sidebar-wcollapsed .nav-link span {
   display: none;
 }
 
