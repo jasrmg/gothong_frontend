@@ -1,4 +1,4 @@
-  // ------------------ START OF BASE CSS ------------------
+/* ------------------ START OF BASE CSS ------------------ */
 :root {
   --primary: #0a1f44;
   --secondary: #1e3a8a;
@@ -26,7 +26,7 @@ body {
   color: var(--primary);
   line-height: 1.6;
 }
-  // ------------------ END OF BASE CSS ------------------
+/* ------------------ END OF BASE CSS ------------------ */
 
 /* Reuse the same sidebar and topbar styles from vessel-activity-log.html */
 .container {
@@ -72,7 +72,7 @@ body {
   padding: 0 1.5rem 1.5rem;
 }
 
-  // ------------------ START OF TOPBAR ------------------
+/* ------------------ START OF TOPBAR ------------------ */
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -169,7 +169,7 @@ body {
   color: var(--dark-gray);
 }
 
-  // ------------------ END OF TOPBAR ------------------
+/* ------------------ END OF TOPBAR ------------------ */
 
 /* ----------- START OF ROUTE ASSIGNMENT CONTAINER ----------- */
 
@@ -231,7 +231,7 @@ span.flatpickr-day.selected {
   border: 1px solid #1e3a8a;
 } */
 
-  // ------------------ END OF FLATPICKR CSS ------------------
+/* ------------------ END OF FLATPICKR CSS ------------------ */
 
 .route-form {
   display: grid;
@@ -327,7 +327,7 @@ span.flatpickr-day.selected {
   gap: 1rem;
   margin-top: 2rem;
 }
-  // ------------------ BUTTON CSS ------------------
+/* ------------------ BUTTON CSS ------------------ */
 .btn {
   display: inline-flex;
   align-items: center;
