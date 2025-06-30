@@ -154,17 +154,37 @@ document.addEventListener("DOMContentLoaded", function () {
       // Fullscreen profile picture preview
       const profilePic = document.getElementById("adminProfilePic");
       profilePic.addEventListener("click", () => {
+        if (document.querySelector(".fullscreen-image")) return;
+
+        // Create the fullscreen overlay
         const fullscreenDiv = document.createElement("div");
         fullscreenDiv.classList.add("fullscreen-image");
 
+        // Create the image element
         const img = document.createElement("img");
         img.src = profilePic.src;
+        img.classList.add("fullscreen-img");
 
+        // Create the close button
+        const closeBtn = document.createElement("button");
+        closeBtn.innerHTML = "&times;";
+        closeBtn.classList.add("close-fullscreen-btn");
+
+        // Append everything
+        fullscreenDiv.appendChild(closeBtn);
         fullscreenDiv.appendChild(img);
         document.body.appendChild(fullscreenDiv);
 
-        fullscreenDiv.addEventListener("click", () => {
-          document.body.removeChild(fullscreenDiv);
+        // Close on button click
+        closeBtn.addEventListener("click", () => {
+          fullscreenDiv.remove();
+        });
+
+        // Close on clicking outside the image
+        fullscreenDiv.addEventListener("click", (e) => {
+          if (e.target === fullscreenDiv) {
+            fullscreenDiv.remove();
+          }
         });
       });
     });
