@@ -28,6 +28,36 @@ body {
   overflow-x: hidden;
 }
 
+/**/
+.voyage-cards-container {
+  max-height: 56vh; /* You can tweak this as needed */
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem;
+  padding: 1rem;
+}
+.pagination-container {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.pagination-btn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0 0.25rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pagination-btn.active {
+  background-color: var(--highlight);
+  color: black;
+}
+
+/**/
 .container {
   display: flex;
   min-height: 100vh;
@@ -221,7 +251,7 @@ body {
   flex: 1;
   margin-left: 250px;
   transition: margin-left 0.3s ease, width 0.3s ease;
-  padding: 0 1.5rem 1.5rem;
+  padding: 0 1.5rem 0 1.5rem;
 }
 
 .sidebar-collapsed-content {
@@ -357,9 +387,9 @@ body {
 }
 
 /* Voyage Report List Styles */
-.voyage-reports-list-container {
+/* .voyage-reports-list-container {
   margin-bottom: 2rem;
-}
+} */
 .voyage-reports-header {
   display: flex;
   justify-content: space-between;
@@ -400,12 +430,6 @@ body {
   border-color: #2563eb;
   outline: none;
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
-}
-
-.voyage-reports-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 1.5rem;
 }
 
 .voyage-report-card {

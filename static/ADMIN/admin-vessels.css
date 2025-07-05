@@ -70,6 +70,33 @@ h6 {
   text-align: center;
 }
 
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-action.mark-arrived {
+  background-color: var(--accent);
+  color: white;
+}
+
+.btn-action.view-report {
+  background-color: var(--highlight);
+  color: black;
+}
+
+.btn-action i {
+  font-size: 14px;
+}
+
 @keyframes rotateShip {
   0% {
     transform: rotate(0deg);
