@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=210mm, height=297mm" />
+  <title>Submanifest | Smart Port</title>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="stylesheet" href="submanifest-review1.css"/>
+  </head>
+<body>
+  <a href="submanifest-review.html" class="back-button no-print"><i class="fas fa-arrow-left"></i> Back to Review</a>
+  <div id="printableContent">
+    <div class="manifest-header">
+      <h1 class="manifest-title">SUBMANIFEST</h1>
+    </div>
+
+    <div class="info-grid">
+      <div>
+        <span class="info-label">Container Number:</span><br />
+        <span class="info-value">MSCU1234567</span>
+      </div>
+      <div>
+        <span class="info-label">Bill of Lading No.:</span><br />
+        <span class="info-value">BOL-2025-0731</span>
+      </div>
+      <div>
+        <span class="info-label">Port of Discharge:</span><br />
+        <span class="info-value">Port of Cebu</span>
+      </div>
+      <div>
+        <span class="info-label">Final Destination:</span><br />
+        <span class="info-value">Mandaue, Cebu</span>
+      </div>
+    </div>
+
+    <h2>Cargo List</h2>
+    <table class="cargo-table">
+      <thead>
+        <tr>
+          <th>Item No.</th>
+          <th>Description of Goods</th>
+          <th>Quantity</th>
+          <th>Weight (kg)</th>
+          <th>Package Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Textile Rolls - Cotton</td>
+          <td>75</td>
+          <td>1,200</td>
+          <td>Cartons</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Electronics - Mobile Accessories</td>
+          <td>200</td>
+          <td>850</td>
+          <td>Boxes</td> 
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Packaged Food (Non-perishable)</td>
+          <td>300</td>
+          <td>1,100</td>
+          <td>Crates</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="summary-box">
+      <p><strong>Total Quantity:</strong> 575 units</p>
+      <p><strong>Total Weight:</strong> 3,150 kg</p>
+      <p><strong>Packages:</strong> Cartons, Boxes, Crates</p>
+    </div>
+
+<div class="print-btn-container no-print" style="display: flex; justify-content: center; gap: 40px; margin-top: 40px;">
+  <button class="print-btn clear">Approved</button>
+  <button class="print-btn reject">Reject</button>
+</div>
+
+  <script src="submanifest-review1.js"></script>
+</body>
+</html>

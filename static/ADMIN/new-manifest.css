@@ -352,51 +352,13 @@ body {
   color: var(--dark-gray);
 }
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.7rem 1.2rem;
-  border: none;
-  border-radius: 6px;
-  font-family: "Montserrat", sans-serif;
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s;
-  text-decoration: none;
-}
-.btn i {
-  margin-right: 0.5rem;
-}
-.btn-primary {
-  background-color: var(--accent);
-  color: white;
-}
-.btn-primary:hover {
-  background-color: #248a4a;
-  transform: translateY(-2px);
-}
-.btn-secondary {
-  background-color: var(--light);
-  color: var(--primary);
-  border: 1px solid var(--gray);
-}
-.btn-secondary:hover {
-  background-color: var(--gray);
-  transform: translateY(-2px);
-}
-
-/* Voyage Report List Styles */
-/* .voyage-reports-list-container {
-  margin-bottom: 2rem;
-} */
-.voyage-reports-header {
+.voyage-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
 }
-.voyage-reports-header h2 {
+.voyage-header h2 {
   font-size: 1.4rem;
   color: var(--primary);
   margin: 0;
@@ -405,9 +367,7 @@ body {
 .search-filter {
   width: 250px;
 }
-/* CSS PARA SA VESSEL TYPES NA PANG SORT DAPAT MAO NI I DEFAULT STYLE SA MGA DROPDOWN */
 .form-select {
-  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); */
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -432,7 +392,7 @@ body {
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
 }
 
-.voyage-report-card {
+.voyage-card {
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -442,16 +402,16 @@ body {
   transition: all 0.3s ease;
   cursor: pointer;
 }
-.voyage-report-card:hover {
+.voyage-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
-.voyage-report-card-header {
+.voyage-card-header {
   display: flex;
   align-items: center;
   margin-bottom: 1rem;
 }
-.voyage-report-card-icon {
+.voyage-card-icon {
   width: 40px;
   height: 40px;
   background: linear-gradient(135deg, var(--secondary), var(--light-blue));
@@ -462,31 +422,31 @@ body {
   margin-right: 1rem;
   flex-shrink: 0;
 }
-.voyage-report-card-icon i {
+.voyage-card-icon i {
   font-size: 1.3rem;
   color: white;
 }
-.voyage-report-card-title h3 {
+.voyage-card-title h3 {
   margin: 0;
   font-size: 1.1rem;
   color: var(--primary);
 }
-.voyage-report-card-title p {
+.voyage-card-title p {
   margin: 0.2rem 0 0;
   font-size: 0.85rem;
   color: var(--dark-gray);
 }
-.voyage-report-card-info {
+.voyage-card-info {
   font-size: 0.9rem;
   color: var(--dark-gray);
   margin-bottom: 0.3rem;
 }
-.voyage-report-card-info strong {
+.voyage-card-info strong {
   color: var(--primary);
 }
 
 /* Voyage Report Detail Styles */
-.voyage-report-detail-container {
+.voyage-detail-container {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -496,44 +456,7 @@ body {
 .back-button-container {
   margin-bottom: 1.5rem;
 }
-.report-section-title {
-  font-size: 1.3rem;
-  color: var(--primary);
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--gray);
-}
-.report-section-title:first-of-type {
-  margin-top: 0;
-}
 
-.detail-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 1.5rem;
-}
-.detail-table th,
-.detail-table td {
-  padding: 0.75rem 1rem;
-  text-align: left;
-  border-bottom: 1px solid var(--gray);
-}
-.detail-table th {
-  background-color: var(--light);
-  font-weight: 600;
-  color: var(--primary);
-  font-size: 0.9rem;
-  width: 30%;
-}
-.detail-table td {
-  font-size: 0.95rem;
-  color: var(--dark-gray);
-}
-.detail-table tr:last-child th,
-.detail-table tr:last-child td {
-  border-bottom: none;
-}
 .action-buttons {
   margin-top: 2rem;
   display: flex;
@@ -541,46 +464,179 @@ body {
   gap: 1rem;
 }
 
-@media (max-width: 768px) {
-  .voyage-reports-grid {
-    grid-template-columns: 1fr;
-  }
-  .voyage-reports-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .voyage-reports-header h2 {
-    margin-bottom: 1rem;
-  }
+/* NEW MANIFEST */
+.voyage-submanifest {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
-/* ----------- IG PRINT ----------- */
-@media print {
-  body * {
-    visibility: hidden;
-  }
+.voyage-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
 
-  #voyageReportContent,
-  #voyageReportContent * {
-    visibility: visible;
-  }
+.voyage-details-header h2 {
+  font-weight: 600;
+  font-size: 1.5rem;
+}
 
-  #voyageReportContent {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    background: white;
-    padding: 2rem;
-    font-size: 12pt;
-  }
+.back-to-list-btn {
+  background-color: var(--light);
+  color: var(--primary) !important;
+  border: 1px solid var(--gray);
+}
+.back-to-list-btn:hover {
+  background-color: var(--gray);
+  transform: translateY(-2px);
+}
 
-  .print-hidden {
-    display: none !important;
-  }
+.generate-manifest-wrapper {
+  margin-top: 1.5rem;
+  text-align: right;
+}
 
-  @page {
-    size: A4;
-    margin: 1in;
-  }
+.generate-manifest-btn {
+  background-color: var(--accent);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 0.4rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.generate-manifest-btn:disabled {
+  background-color: var(--gray);
+  cursor: not-allowed;
+}
+
+.manifest-warning {
+  margin-top: 0.5rem;
+  color: var(--danger);
+  font-size: 0.9rem;
+}
+
+/* ---------- START OF TABLE ---------- */
+.table-responsive {
+  max-height: 380px;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive thead th {
+  position: sticky;
+  top: 0;
+  background-color: var(--light);
+  z-index: 1;
+}
+
+.table-responsive::-webkit-scrollbar {
+  width: 8px;
+}
+.table-responsive::-webkit-scrollbar-thumb {
+  background-color: var(--dark-gray);
+  border-radius: 4px;
+}
+.table-responsive::-webkit-scrollbar-track {
+  background-color: var(--light);
+}
+
+.submanifest-table {
+  width: 100%;
+  min-width: 800px;
+}
+
+.submanifest-table th {
+  text-align: left;
+  padding: 0.8rem 1rem;
+  background-color: var(--light);
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 0.9rem;
+}
+.submanifest-table td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid var(--gray);
+  font-size: 0.95rem;
+}
+
+.submanifest-table tr:last-child td {
+  border-bottom: none;
+}
+
+.submanifest-table tr:hover td {
+  background-color: rgba(70, 130, 180, 0.05);
+}
+
+/* ---------- BUTTON STYLES ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  color: var(--light);
+  padding: 0.7rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+
+.btn i {
+  margin-right: 0.5rem;
+}
+.btn-icon {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-icon:last-child {
+  margin-right: 0;
+}
+
+/* View Button */
+.btn-icon.view {
+  color: var(--light-blue);
+  background-color: rgba(70, 130, 180, 0.1);
+}
+.btn-icon.view:hover {
+  color: white;
+  background-color: var(--light-blue);
+}
+
+/* Approve Button */
+.btn-icon.approve {
+  color: var(--accent);
+  background-color: rgba(16, 185, 129, 0.1);
+}
+.btn-icon.approve:hover {
+  color: white;
+  background-color: var(--accent);
+}
+
+/* Reject Button */
+.btn-icon.reject {
+  color: var(--danger);
+  background-color: rgba(209, 67, 67, 0.1);
+}
+.btn-icon.reject:hover {
+  color: white;
+  background-color: var(--danger);
 }

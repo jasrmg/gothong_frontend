@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=210mm, height=297mm" />
+  <title>Customs Clearance Certificate</title>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #0a1f44;
+      --secondary: #1e3a8a;
+      --border-color: #e5e7eb;
+      --light-bg: #f9fafb;
+      --dark-gray: #6b7280;
+    }
+
+    body {
+      font-family: "Montserrat", sans-serif;
+      color: black;
+      padding: 30px;
+      background: #f5f7fa;
+    }
+
+    #printableContent {
+      width: 180mm;
+      min-height: 270mm;
+      margin: auto;
+      background: white;
+      padding: 20mm;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      border: 2px solid black;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .logo img {
+      width: 100px;
+      height: auto;
+    }
+
+    h1, h2, h3 {
+      text-align: center;
+      margin: 5px 0;
+    }
+
+    hr {
+      border: 1px solid black;
+      margin: 20px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    td, th {
+      border: 1px solid #000;
+      padding: 8px;
+      vertical-align: top;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    .section-title {
+      font-weight: bold;
+      margin-top: 20px;
+      text-decoration: underline;
+      font-size: 1rem;
+    }
+
+    .signature {
+      margin-top: 50px;
+    }
+
+    .print-button-container {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .print-btn {
+      padding: 12px 25px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: "Exo 2", sans-serif;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .print-btn:hover {
+      background-color: var(--secondary);
+    }
+
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+
+      body {
+        margin: 0;
+        background: white;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Printable Content -->
+  <div id="printableContent">
+    <div class="logo">
+      <img src="republicseal.png" alt="Republic Seal">
+    </div>
+
+    <h2>Republic of the Philippines</h2>
+    <h3>Bureau of Customs</h3>
+    <h1>Customs Clearance Certificate</h1>
+    <hr>
+
+    <table>
+      <tr>
+        <th>Clearance No.</th>
+        <td>CC-2025-0345</td>
+        <th>Date Issued</th>
+        <td>May 20, 2025</td>
+      </tr>
+      <tr>
+        <th>Port of Entry</th>
+        <td>Cebu Port</td>
+        <th>Destination Port</th>
+        <td>Davao Port</td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <th colspan="2">Shipper (Consignor)</th>
+        <th colspan="2">Receiver (Consignee)</th>
+      </tr>
+      <tr>
+        <td colspan="2">
+          GlobalTech Electronics Corporation<br>
+          123 Magsaysay Ave., Cebu City
+        </td>
+        <td colspan="2">
+          Davao Gadgets Wholesale<br>
+          Davao asd, Davao
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <th>Vessel Name</th>
+        <td>MV Island Express 3</td>
+        <th>Voyage Number</th>
+        <td>VX-1120</td>
+      </tr>
+      <tr>
+        <th>Estimated Arrival</th>
+        <td colspan="3">May 22, 2025</td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <th>Item Number</th>
+        <th>Description</th>
+        <th>Quantity</th>
+        <th>Weight</th>
+        <th>Value</th>
+      </tr>
+      <tr>
+        <td>xxx</td>
+        <td>Monitor</td>
+        <td>2</td>
+        <td>0.05 kg</td>
+        <td>10 pesos</td>
+      </tr>
+    </table>
+
+    <div class="section-title">Submitted Documents:</div>
+    <ul>
+      <li>Bill Of Lading</li>
+      <li>Packing List</li>
+      <li>Commercial Invoice</li>
+      <li>Import Permit</li>
+    </ul>
+
+    <div class="section-title">Customs Decision:</div>
+    <p>Cleared<br>No physical inspection required. All documentation verified and in compliance with domestic shipping regulations.</p>
+
+    <div class="section-title">Remarks:</div>
+    <p>All cargoes listed are within import compliance and manifest details are matched. Approved for loading and departure.</p>
+
+    <div class="signature">
+      <strong>Cleared By:</strong><br>
+      Customs Officer: John M. Reyes<br>
+      Date & Time: May 20, 2025 – 10:42 AM
+    </div>
+  </div>
+
+  <!-- Print Button BELOW content -->
+  <div class="print-button-container no-print">
+    <button class="print-btn" onclick="window.print()">Print Certificate</button>
+  </div>
+
+</body>
+</html>
