@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>View Custom Clearance | Smart Port</title>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0A1F44;
+            --secondary: #1E3A8A;
+            --accent: #2D9C5A;
+            --danger: #D14343;
+            --warning: #F59E0B;
+            --info: #3B82F6;
+            --highlight: #D4AF37;
+            --light-blue: #4682B4;
+            --lighter-blue: #8CA6DB;
+            --light: #F5F5F5;
+            --gray: #E5E7EB;
+            --dark-gray: #6B7280;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light);
+            color: var(--primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 600;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 1rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: width 0.3s ease;
+            z-index: 100;
+        }
+        
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: padding 0.3s ease;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            transition: flex-direction 0.3s ease, align-items 0.3s ease;
+        }
+        
+        .logo-icon {
+            font-size: 1.8rem;
+            margin-right: 0.8rem;
+            color: var(--highlight);
+        }
+        
+        .logo-text {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            white-space: nowrap;
+            margin-right: 1rem;
+        }
+        
+        .collapse-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.4rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            padding: 0.4rem;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .collapse-btn:hover {
+            opacity: 1;
+        }
+        
+        /* Sidebar collapsed state styling */
+        .sidebar-collapsed .sidebar-header {
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .sidebar-collapsed .logo {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .sidebar-collapsed .logo-text {
+            display: none;
+        }
+        
+        .sidebar-collapsed .logo-icon {
+            margin-right: 0;
+            margin-top: 3rem;
+            margin-bottom: 0;
+            font-size: 1.8rem;
+        }
+        
+        .sidebar-collapsed .collapse-btn {
+            position: absolute;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 0;
+            order: -1;
+            padding: 0.2rem;
+        }
+        
+        .nav-menu {
+            list-style: none;
+        }
+        
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .nav-link i {
+            font-size: 1.1rem;
+            margin-right: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .nav-link .fa-chevron-down {
+            font-size: 0.8rem;
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link.open .fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        .sub-menu {
+            list-style: none;
+            padding-left: 1.5rem; /* Indent sub-menu items */
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .sub-menu.open {
+            max-height: 500px; /* Adjust as needed */
+        }
+
+        .sub-menu .nav-link {
+            padding: 0.6rem 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .sub-menu .nav-link i {
+            font-size: 0.9rem;
+            margin-right: 0.8rem;
+        }
+
+        .sidebar-collapsed .sub-menu {
+            display: none; /* Hide sub-menu when sidebar is collapsed */
+        }
+        
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 0 1.5rem 1.5rem;
+            transition: margin-left 0.3s ease, width 0.3s ease;
+            min-height: 100vh;
+            width: calc(100% - 250px);
+        }
+        
+        .main-content.expanded {
+            margin-left: 80px;
+            width: calc(100% - 80px);
+        }
+        
+        /* Top Bar Styles */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 10;
+            margin: 0 -1.5rem 1.5rem -1.5rem;
+        }
+        
+        .search-bar {
+            position: relative;
+            width: 300px;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 0.7rem 1rem 0.7rem 2.5rem;
+            border: 1px solid var(--gray);
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--light-blue);
+            box-shadow: 0 0 0 3px rgba(70, 130, 180, 0.2);
+        }
+        
+        .search-bar i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-gray);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+        
+        .notification-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-right: 1.5rem;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.8rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .user-name {
+            font-weight: 500;
+            margin-right: 0.5rem;
+        }
+        
+        /* Table Styles */
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 1.5rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background-color: var(--light);
+            border-bottom: 2px solid var(--gray);
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+        }
+        
+        th {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        th:hover {
+            background-color: rgba(70, 130, 180, 0.1);
+        }
+        
+        th i {
+            margin-left: 0.5rem;
+            opacity: 0.5;
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid var(--gray);
+            transition: all 0.3s;
+        }
+        
+        tbody tr:hover {
+            background-color: rgba(70, 130, 180, 0.05);
+        }
+        
+        /* Filter Section */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        .filter-label {
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+            color: var(--dark-gray);
+        }
+        
+        .filter-select {
+            padding: 0.5rem;
+            border: 1px solid var(--gray);
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            background-color: white;
+            min-width: 120px;
+        }
+        
+        /* Button styles */
+        .btn {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(10, 31, 68, 0.1);
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 1rem;
+            opacity: 0.7;
+            transition: all 0.3s;
+            padding: 0.3rem;
+        }
+        
+        .action-btn:hover {
+            opacity: 1;
+        }
+        
+        .action-btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-badge.cleared {
+            background-color: rgba(45, 156, 90, 0.1);
+            color: var(--accent);
+        }
+        
+        .status-badge.pending-docs {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-badge.under-review {
+            background-color: rgba(70, 130, 180, 0.1);
+            color: var(--light-blue);
+        }
+        
+        .status-badge.rejected {
+            background-color: rgba(209, 67, 67, 0.1);
+            color: var(--danger);
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+        
+        .pagination-info {
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+        
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .pagination-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--gray);
+            border-radius: 6px;
+            background-color: white;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .pagination-btn:hover:not(.active) {
+            background-color: var(--light);
+        }
+        
+        .pagination-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .pagination-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: translateY(-20px);
+            transition: transform 0.3s;
+            position: relative;
+        }
+        
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin: 0;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--dark-gray);
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .modal-close:hover {
+            color: var(--danger);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--gray);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        .rejection-reason {
+            margin-bottom: 1rem;
+            background-color: rgba(209, 67, 67, 0.05);
+            border-left: 4px solid var(--danger);
+            padding: 1rem;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .rejection-reason-title {
+            font-weight: 600;
+            color: var(--danger);
+            margin-bottom: 0.5rem;
+        }
+        
+        .clearance-details-item {
+            margin-bottom: 1rem;
+            display: flex;
+        }
+        
+        .clearance-details-label {
+            font-weight: 600;
+            width: 30%;
+            color: var(--primary);
+        }
+        
+        .clearance-details-value {
+            flex: 1;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+            
+            .logo-text {
+                display: none;
+            }
+            
+            .nav-link span {
+                display: none;
+            }
+            
+            .filters {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            .filter-select {
+                width: 100%;
+            }
+            
+            .pagination {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+                gap: 0.5rem;
+                width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="../shipper-dashboard.html" class="logo" style="text-decoration: none; color: white;">
+                    <i class="fas fa-anchor logo-icon"></i>
+                    <span class="logo-text">Smart Port</span>
+                </a>
+                <button class="collapse-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="../shipper-dashboard.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link" data-target-submenu="vesselsSubMenu">
+                        <i class="fas fa-ship"></i>
+                        <span>Vessels</span>
+                    </a>
+                    <ul class="sub-menu" id="vesselsSubMenu">
+                        <li><a href="../vessels/view-vessels.html" class="nav-link"><i class="fas fa-list-ul"></i><span>View All Vessels</span></a></li>
+                        <li><a href="../vessels/request-vessel-info.html" class="nav-link"><i class="fas fa-question-circle"></i><span>Request Vessel Info</span></a></li>
+                        <li><a href="../vessels/confirm-cargo-delivery.html" class="nav-link"><i class="fas fa-check-circle"></i><span>Confirm Cargo Delivery</span></a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link active" data-target-submenu="shippingDetailsSubMenu">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Shipping Details</span>
+                    </a>
+                    <ul class="sub-menu open" id="shippingDetailsSubMenu">
+                        <li><a href="../shipping-details/view-shipments.html" class="nav-link"><i class="fas fa-list-alt"></i><span>Shipment History</span></a></li>
+                        <li><a href="../shipping-details/submit-shipment.html" class="nav-link"><i class="fas fa-edit"></i><span>Submit Shipment</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link active" data-target-submenu="customClearanceSubMenu">
+                        <i class="fas fa-clipboard-check"></i>
+                        <span>Custom Clearance</span>
+                    </a>
+                    <ul class="sub-menu open" id="customClearanceSubMenu">
+                        <li><a href="view-custom-clearance.html" class="nav-link active"><i class="fas fa-eye"></i><span>Clearance Status</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link" data-target-submenu="reportsSubMenu">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports</span>
+                    </a>
+                    <ul class="sub-menu" id="reportsSubMenu">
+                        <li><a href="../reports/view-incident-feed.html" class="nav-link"><i class="fas fa-stream"></i><span>View Incident Feed</span></a></li>
+                        <li><a href="../reports/submit-incident-report.html" class="nav-link"><i class="fas fa-file-medical-alt"></i><span>Submit Incident Report</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../../index.html" class="nav-link">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="topbar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search clearances..." id="searchInput">
+                </div>
+                
+                <div class="user-menu">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">1</span> <!-- Example badge -->
+                    </button>
+                    
+                    <div class="user-profile">
+                        <div class="user-avatar">SH</div>
+                        <span class="user-name">Shipper User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page Content -->
+            <div class="dashboard-content">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1>Custom Clearance Status</h1>
+                        <p>Track the customs clearance process for your shipments</p>
+                    </div>
+                                        <div style="display: flex; gap: 1rem;">                        <a href="view-custom-clearance.html" class="btn btn-primary">                            <i class="fas fa-plus"></i> Submit New Clearance                        </a>                    </div>
+                </div>
+                
+                <!-- Filters -->
+                <div class="filters">
+                    <div class="filter-group">
+                        <span class="filter-label">Status:</span>
+                        <select class="filter-select" id="statusFilter">
+                            <option value="">All Statuses</option>
+                            <option value="cleared">Cleared</option>
+                            <option value="pending-docs">Pending Documents</option>
+                            <option value="under-review">Under Review</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <span class="filter-label">Port:</span>
+                        <select class="filter-select" id="portFilter">
+                            <option value="">All Ports</option>
+                            <option value="Manila">Manila</option>
+                            <option value="Cebu">Cebu</option>
+                            <option value="Davao">Davao</option>
+                            <option value="Iloilo">Iloilo</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <span class="filter-label">Date Range (Submission):</span>
+                        <select class="filter-select" id="dateFilter">
+                            <option value="">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="quarter">Last 3 Months</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Custom Clearance Table -->
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)">Clearance ID <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(1)">Shipment ID <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(2)">Port <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(3)">Submitted Date <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(4)">Status <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(5)">Last Update <i class="fas fa-sort"></i></th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-status="cleared" data-port="Manila" data-date="2023-05-12">
+                                <td>CL001</td>
+                                <td>SHP001</td>
+                                <td>Manila</td>
+                                <td>2023-05-12</td>
+                                <td><span class="status-badge cleared">Cleared</span></td>
+                                <td>2023-05-14</td>
+                                <td>
+                                    <div class="action-btn-group">
+                                        <button class="action-btn" title="View Details"><i class="fas fa-eye"></i></button>
+                                        <button class="action-btn" title="Download Documents"><i class="fas fa-download"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-status="pending-docs" data-port="Cebu" data-date="2023-05-15">
+                                <td>CL002</td>
+                                <td>SHP002</td>
+                                <td>Cebu</td>
+                                <td>2023-05-15</td>
+                                <td><span class="status-badge pending-docs">Pending Documents</span></td>
+                                <td>2023-05-16</td>
+                                <td>
+                                    <div class="action-btn-group">
+                                        <button class="action-btn" title="View Details"><i class="fas fa-eye"></i></button>
+                                        <button class="action-btn" title="Upload Documents"><i class="fas fa-upload"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                             <tr data-status="under-review" data-port="Davao" data-date="2023-05-17">
+                                <td>CL003</td>
+                                <td>SHP003</td>
+                                <td>Davao</td>
+                                <td>2023-05-17</td>
+                                <td><span class="status-badge under-review">Under Review</span></td>
+                                <td>2023-05-18</td>
+                                <td>
+                                    <div class="action-btn-group">
+                                        <button class="action-btn" title="View Details"><i class="fas fa-eye"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-status="rejected" data-port="Manila" data-date="2023-05-10" data-rejection-reason="The submitted customs declaration form contains inconsistent information between the commercial invoice and packing list. Please reconcile the discrepancies and resubmit with corrected documentation." data-reviewed-by="John Smith, Customs Officer">
+                                <td>CL004</td>
+                                <td>SHP004</td>
+                                <td>Manila</td>
+                                <td>2023-05-10</td>
+                                <td><span class="status-badge rejected">Rejected</span></td>
+                                <td>2023-05-11</td>
+                                <td>
+                                    <div class="action-btn-group">
+                                        <button class="action-btn view-rejection-btn" title="View Rejection Details" data-id="CL004"><i class="fas fa-eye"></i></button>
+                                        <button class="action-btn" title="Resubmit"><i class="fas fa-redo"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-status="cleared" data-port="Iloilo" data-date="2023-05-18">
+                                <td>CL005</td>
+                                <td>SHP005</td>
+                                <td>Iloilo</td>
+                                <td>2023-05-18</td>
+                                <td><span class="status-badge cleared">Cleared</span></td>
+                                <td>2023-05-20</td>
+                                <td>
+                                    <div class="action-btn-group">
+                                        <button class="action-btn" title="View Details"><i class="fas fa-eye"></i></button>
+                                        <button class="action-btn" title="Download Documents"><i class="fas fa-download"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination">
+                    <div class="pagination-info">
+                        Showing 1 to 5 of 5 entries
+                    </div>
+                    
+                    <div class="pagination-controls">
+                        <button class="pagination-btn disabled" title="Previous Page">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="pagination-btn active">1</button>
+                        <button class="pagination-btn disabled" title="Next Page">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Rejection Modal -->
+    <div class="modal-overlay" id="rejectionModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Clearance Rejection Details</h3>
+                <button class="modal-close" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="rejection-reason">
+                    <div class="rejection-reason-title">Reason for Rejection:</div>
+                    <div id="rejectionReasonText">The submitted customs declaration form contains inconsistent information between the commercial invoice and packing list. Please reconcile the discrepancies and resubmit with corrected documentation.</div>
+                </div>
+                
+                <div class="clearance-details">
+                    <div class="clearance-details-item">
+                        <div class="clearance-details-label">Clearance ID:</div>
+                        <div class="clearance-details-value" id="modalClearanceId">CL004</div>
+                    </div>
+                    <div class="clearance-details-item">
+                        <div class="clearance-details-label">Shipment ID:</div>
+                        <div class="clearance-details-value" id="modalShipmentId">SHP004</div>
+                    </div>
+                    <div class="clearance-details-item">
+                        <div class="clearance-details-label">Port:</div>
+                        <div class="clearance-details-value" id="modalPort">Manila</div>
+                    </div>
+                    <div class="clearance-details-item">
+                        <div class="clearance-details-label">Submitted Date:</div>
+                        <div class="clearance-details-value" id="modalSubmittedDate">2023-05-10</div>
+                    </div>
+                    <div class="clearance-details-item">
+                        <div class="clearance-details-label">Rejected Date:</div>
+                        <div class="clearance-details-value" id="modalRejectedDate">2023-05-11</div>
+                    </div>
+                    <div class="clearance-details-item">
+                        <div class="clearance-details-label">Reviewed By:</div>
+                        <div class="clearance-details-value" id="modalReviewedBy">John Smith, Customs Officer</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="closeModalBtn">Close</button>
+                <button class="btn btn-primary" id="resubmitBtn">Resubmit</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar collapse functionality
+        const collapseBtn = document.querySelector('.collapse-btn');
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+        
+        // Function to check if sidebar was previously collapsed
+        function isSidebarCollapsed() {
+            return localStorage.getItem('sidebarCollapsed') === 'true';
+        }
+
+        // Apply collapsed state on page load
+        if (isSidebarCollapsed()) {
+            sidebar.classList.add('sidebar-collapsed');
+            mainContent.classList.add('expanded');
+        }
+
+        collapseBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('sidebar-collapsed');
+            mainContent.classList.toggle('expanded');
+            // Store preference
+            localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('sidebar-collapsed'));
+        });
+
+        // Generalized Submenu functionality
+        document.querySelectorAll('.nav-item.has-submenu > .nav-link').forEach(mainLink => {
+            const subMenuId = mainLink.dataset.targetSubmenu;
+            const subMenu = document.getElementById(subMenuId);
+            
+            if (!subMenu) { 
+                return; 
+            }
+            
+            const chevronIcon = mainLink.querySelector('.fa-chevron-down'); 
+
+            const setChevronVisibility = (linkElement, menuElement) => {
+                const currentChevron = linkElement.querySelector('.fa-chevron-down');
+                if (currentChevron) { 
+                    if (menuElement.classList.contains('open')) {
+                        currentChevron.style.display = 'none';
+                    } else {
+                        currentChevron.style.display = ''; 
+                    }
+                }
+            };
+
+            let isAnySubLinkActive = false;
+            subMenu.querySelectorAll('.nav-link.active').forEach(() => {
+                isAnySubLinkActive = true;
+            });
+
+            if (mainLink.classList.contains('active') || isAnySubLinkActive) {
+                if (isAnySubLinkActive && !mainLink.classList.contains('active')) {
+                    mainLink.classList.add('active');
+                }
+                mainLink.classList.add('open');
+                subMenu.classList.add('open');
+                subMenu.style.maxHeight = subMenu.scrollHeight + "px";
+            }
+            if (chevronIcon) { 
+                setChevronVisibility(mainLink, subMenu);
+            }
+
+            mainLink.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                const clickedMainLink = mainLink;
+                const clickedSubMenu = subMenu;
+                const clickedChevronIcon = clickedMainLink.querySelector('.fa-chevron-down'); 
+
+                const isClickedSubMenuAlreadyOpen = clickedSubMenu.classList.contains('open');
+
+                document.querySelectorAll('.nav-item.has-submenu > .nav-link').forEach(otherML => {
+                    if (otherML !== clickedMainLink) {
+                        otherML.classList.remove('active'); 
+                        otherML.classList.remove('open');
+                        const otherSM_id = otherML.dataset.targetSubmenu;
+                        const otherSM = document.getElementById(otherSM_id);
+                        const otherChevronIcon = otherML.querySelector('.fa-chevron-down');
+                        if (otherSM) {
+                            otherSM.classList.remove('open');
+                            otherSM.style.maxHeight = null;
+                            if (otherChevronIcon) { 
+                                setChevronVisibility(otherML, otherSM);
+                            }
+                        }
+                    }
+                });
+                
+                clickedMainLink.classList.add('active');
+
+                if (isClickedSubMenuAlreadyOpen) {
+                    clickedMainLink.classList.remove('open');
+                    clickedSubMenu.classList.remove('open');
+                    clickedSubMenu.style.maxHeight = null;
+                } else {
+                    clickedMainLink.classList.add('open');
+                    clickedSubMenu.classList.add('open');
+                    clickedSubMenu.style.maxHeight = clickedSubMenu.scrollHeight + "px";
+                }
+                
+                if (clickedChevronIcon) { 
+                    setChevronVisibility(clickedMainLink, clickedSubMenu);
+                }
+            });
+        });
+        
+        // Search and Filter functionality
+        const searchInput = document.getElementById('searchInput');
+        const tableRows = document.querySelectorAll('tbody tr');
+        const statusFilter = document.getElementById('statusFilter');
+        const portFilter = document.getElementById('portFilter');
+        const dateFilter = document.getElementById('dateFilter');
+
+        searchInput.addEventListener('input', applyFilters);
+        statusFilter.addEventListener('change', applyFilters);
+        portFilter.addEventListener('change', applyFilters);
+        dateFilter.addEventListener('change', applyFilters);
+        
+        function applyFilters() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const statusValue = statusFilter.value;
+            const portValue = portFilter.value;
+            const dateValue = dateFilter.value;
+            
+            tableRows.forEach(row => {
+                const rowData = Array.from(row.cells).map(cell => cell.textContent.toLowerCase());
+                const status = row.getAttribute('data-status');
+                const port = row.getAttribute('data-port');
+                const date = row.getAttribute('data-date'); // Submitted date
+                
+                // Search filter
+                const matchesSearch = rowData.some(text => text.includes(searchTerm));
+                
+                // Status filter
+                const matchesStatus = statusValue === '' || status === statusValue;
+                
+                // Port filter
+                const matchesPort = portValue === '' || port === portValue;
+                
+                // Date filter for submitted date
+                let matchesDate = true;
+                if (dateValue !== '') {
+                    const submittedDate = new Date(date);
+                    const today = new Date();
+                    
+                    if (dateValue === 'today') {
+                        matchesDate = submittedDate.toDateString() === today.toDateString();
+                    } else if (dateValue === 'week') {
+                        const weekAgo = new Date();
+                        weekAgo.setDate(today.getDate() - 7);
+                        matchesDate = submittedDate >= weekAgo && submittedDate <= today;
+                    } else if (dateValue === 'month') {
+                        const monthAgo = new Date();
+                        monthAgo.setMonth(today.getMonth() - 1);
+                        matchesDate = submittedDate >= monthAgo && submittedDate <= today;
+                    } else if (dateValue === 'quarter') {
+                        const quarterAgo = new Date();
+                        quarterAgo.setMonth(today.getMonth() - 3);
+                        matchesDate = submittedDate >= quarterAgo && submittedDate <= today;
+                    }
+                }
+                
+                if (matchesSearch && matchesStatus && matchesPort && matchesDate) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        // Sorting functionality
+        let currentSortColumn = -1;
+        let currentSortDirection = 'asc';
+        
+        function sortTable(columnIndex) {
+            const table = document.querySelector('table');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            if (currentSortColumn === columnIndex) {
+                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortDirection = 'asc';
+                currentSortColumn = columnIndex;
+            }
+            
+            rows.sort((a, b) => {
+                let aValue = a.cells[columnIndex].textContent;
+                let bValue = b.cells[columnIndex].textContent;
+                
+                // Handle date sorting for Submitted Date and Last Update
+                if (columnIndex === 3 || columnIndex === 5) { 
+                    aValue = new Date(aValue);
+                    bValue = new Date(bValue);
+                }
+                
+                let comparison = 0;
+                if (aValue > bValue) {
+                    comparison = 1;
+                } else if (aValue < bValue) {
+                    comparison = -1;
+                }
+                
+                return currentSortDirection === 'asc' ? comparison : -comparison;
+            });
+            
+            rows.forEach(row => tbody.appendChild(row));
+        }
+        
+        // Modal functionality
+        const rejectionModal = document.getElementById('rejectionModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const closeModalIcon = document.getElementById('closeModal');
+        const resubmitBtn = document.getElementById('resubmitBtn');
+        
+        // Add event listeners to rejection view buttons
+        document.querySelectorAll('.view-rejection-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const clearanceId = this.getAttribute('data-id');
+                const shipmentId = row.cells[1].textContent;
+                const port = row.cells[2].textContent;
+                const submittedDate = row.cells[3].textContent;
+                const rejectedDate = row.cells[5].textContent;
+                const rejectionReason = row.getAttribute('data-rejection-reason');
+                const reviewedBy = row.getAttribute('data-reviewed-by');
+                
+                // Update modal with data
+                document.getElementById('modalClearanceId').textContent = clearanceId;
+                document.getElementById('modalShipmentId').textContent = shipmentId;
+                document.getElementById('modalPort').textContent = port;
+                document.getElementById('modalSubmittedDate').textContent = submittedDate;
+                document.getElementById('modalRejectedDate').textContent = rejectedDate;
+                document.getElementById('rejectionReasonText').textContent = rejectionReason;
+                document.getElementById('modalReviewedBy').textContent = reviewedBy;
+                
+                // Show modal
+                rejectionModal.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            });
+        });
+        
+        // Close modal when clicking the close button or icon
+        closeModalBtn.addEventListener('click', closeModal);
+        closeModalIcon.addEventListener('click', closeModal);
+        
+        // Close modal when clicking outside the modal content
+        rejectionModal.addEventListener('click', function(e) {
+            if (e.target === rejectionModal) {
+                closeModal();
+            }
+        });
+        
+        // Close modal function
+        function closeModal() {
+            rejectionModal.classList.remove('active');
+            document.body.style.overflow = ''; // Re-enable scrolling
+        }
+        
+        // Resubmit button functionality
+        resubmitBtn.addEventListener('click', function() {
+            // Here you would typically navigate to the resubmission form
+            // For now, just show an alert
+            alert('You will be redirected to resubmit your clearance.');
+            closeModal();
+        });
+    </script>
+</body>
+</html> 

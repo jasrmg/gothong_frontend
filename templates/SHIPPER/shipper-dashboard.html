@@ -1,0 +1,2312 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Shipper Dashboard | Smart Port</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      :root {
+        --primary: #0a1f44;
+        --secondary: #1e3a8a;
+        --accent: #2d9c5a;
+        --danger: #d14343;
+        --highlight: #d4af37;
+        --light-blue: #4682b4;
+        --lighter-blue: #8ca6db;
+        --light: #f5f5f5;
+        --gray: #e5e7eb;
+        --dark-gray: #6b7280;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        font-family: "Montserrat", sans-serif;
+        background-color: var(--light);
+        color: var(--primary);
+        line-height: 1.6;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Exo 2", sans-serif;
+        font-weight: 600;
+      }
+
+      .container {
+        display: flex;
+        min-height: 100vh;
+        width: 100%;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      /* Sidebar Styles */
+      .sidebar {
+        width: 250px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        padding: 1.5rem 1rem;
+        position: fixed;
+        height: 100vh;
+        /*overflow-y: hidden;*/
+        overflow-y: none;
+        transition: width 0.3s ease;
+        z-index: 100;
+      }
+
+      .sidebar-collapsed {
+        width: 80px;
+      }
+
+      .sidebar-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transition: padding 0.3s ease;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        transition: flex-direction 0.3s ease, align-items 0.3s ease;
+      }
+
+      .logo-icon {
+        font-size: 1.8rem;
+        margin-right: 0.8rem;
+        color: var(--highlight);
+      }
+
+      .logo-text {
+        font-family: "Exo 2", sans-serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        white-space: nowrap;
+        margin-right: 1rem;
+      }
+
+      .collapse-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.4rem;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: all 0.3s ease;
+        padding: 0.4rem;
+        position: relative;
+        z-index: 5;
+      }
+
+      .collapse-btn:hover {
+        opacity: 1;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+      }
+
+      .logo-icon {
+        font-size: 1.8rem;
+        margin-right: 0.8rem;
+        color: var(--highlight);
+      }
+
+      .logo-text {
+        font-family: "Exo 2", sans-serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      /* Sidebar collapsed state styling */
+      .sidebar-collapsed .sidebar-header {
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem 0;
+      }
+
+      .sidebar-collapsed .logo {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .sidebar-collapsed .logo-text {
+        display: none;
+      }
+
+      .sidebar-collapsed .logo-icon {
+        margin-right: 0;
+        margin-top: 3rem;
+        margin-bottom: 0;
+        font-size: 1.8rem;
+      }
+
+      .sidebar-collapsed .nav-item.expanded .nav-sub-menu {
+        height: 0;
+      }
+
+      .sidebar-collapsed .collapse-btn {
+        position: absolute;
+        top: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-bottom: 0;
+        order: -1;
+        padding: 0.2rem;
+      }
+
+      .nav-menu {
+        list-style: none;
+      }
+
+      .nav-item {
+        margin-bottom: 0.5rem;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.8rem 0.8rem;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        border-radius: 6px;
+        transition: all 0.3s;
+        white-space: nowrap;
+      }
+
+      .nav-link:hover,
+      .nav-link.active {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+      }
+
+      .nav-link i {
+        font-size: 1.1rem;
+        margin-right: 1rem;
+        width: 20px;
+        text-align: center;
+      }
+
+      /* Add subnav styles */
+      .nav-sub-menu {
+        list-style: none;
+        margin-left: 2.5rem;
+        height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .nav-item.expanded .nav-sub-menu {
+        height: auto;
+        margin-top: 0.3rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .nav-sub-link {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 0.8rem;
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        border-radius: 6px;
+        transition: all 0.3s;
+        font-size: 0.9rem;
+        white-space: nowrap;
+      }
+
+      .nav-sub-link i {
+        font-size: 0.9rem;
+        width: 20px;
+        margin-right: 0.5rem;
+        text-align: center;
+      }
+
+      .nav-sub-link:hover,
+      .nav-sub-link.active {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+      }
+
+      .nav-item .nav-link .toggle-icon {
+        margin-left: auto;
+        transition: transform 0.3s ease;
+      }
+
+      .nav-item.expanded .nav-link .toggle-icon {
+        transform: rotate(180deg);
+      }
+
+      /* Sidebar collapsed state sub-menu styles */
+      .sidebar-collapsed .nav-sub-menu {
+        display: none; /* Hide submenus completely when sidebar is collapsed */
+      }
+
+      .sidebar-collapsed .logo-text,
+      .sidebar-collapsed .nav-link span {
+        display: none;
+      }
+
+      .sidebar-collapsed .nav-link {
+        justify-content: center;
+        padding: 0.8rem 0;
+      }
+
+      .sidebar-collapsed .nav-link i {
+        margin-right: 0;
+        font-size: 1.3rem;
+      }
+
+      /* Main Content Styles */
+      .main-content {
+        flex: 1;
+        margin-left: 250px;
+        transition: margin-left 0.3s ease, width 0.3s ease;
+        min-height: 100vh;
+        width: calc(100% - 250px);
+        max-width: calc(100% - 80px);
+        overflow-x: hidden;
+        padding: 0 1.5rem 1.5rem;
+      }
+
+      .sidebar-collapsed-content {
+        margin-left: 80px;
+        width: calc(100% - 80px);
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        z-index: 10;
+        margin: 0 -1.5rem 1.5rem -1.5rem;
+      }
+
+      .search-bar {
+        position: relative;
+        width: 300px;
+      }
+
+      .search-bar input {
+        width: 100%;
+        padding: 0.7rem 1rem 0.7rem 2.5rem;
+        border: 1px solid var(--gray);
+        border-radius: 6px;
+        font-family: "Montserrat", sans-serif;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+      }
+
+      .search-bar input:focus {
+        outline: none;
+        border-color: var(--light-blue);
+        box-shadow: 0 0 0 3px rgba(70, 130, 180, 0.2);
+      }
+
+      .search-bar i {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--dark-gray);
+      }
+
+      .user-menu {
+        display: flex;
+        align-items: center;
+      }
+
+      .notification-btn {
+        background: none;
+        border: none;
+        color: var(--primary);
+        font-size: 1.2rem;
+        margin-right: 1.5rem;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .notification-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: var(--danger);
+        color: white;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 600;
+      }
+
+      .user-profile {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: var(--secondary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.8rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .user-name {
+        font-weight: 500;
+        margin-right: 0.5rem;
+      }
+
+      /* Dashboard Content */
+      .dashboard-content {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
+      }
+
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .page-title h1 {
+        font-size: 1.8rem;
+        color: var(--primary);
+      }
+
+      .page-title p {
+        color: var(--dark-gray);
+        font-size: 0.95rem;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 0.7rem 1.2rem;
+        background-color: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-family: "Exo 2", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn:hover {
+        background-color: #248a4a;
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        background-color: var(--secondary);
+      }
+
+      .btn-secondary:hover {
+        background-color: #172f6e;
+      }
+
+      .btn-outline {
+        background: transparent;
+        border: 2px solid var(--secondary);
+        color: var(--secondary);
+      }
+
+      .btn-outline:hover {
+        background: rgba(30, 58, 138, 0.1);
+        transform: none;
+      }
+
+      /* Dashboard Grid */
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      @media (min-width: 992px) {
+        .dashboard-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      .card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        padding: 1.5rem;
+        transition: all 0.3s;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--primary);
+      }
+
+      .card-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+      }
+
+      .card-icon.blue {
+        background-color: var(--light-blue);
+      }
+
+      .card-icon.green {
+        background-color: var(--accent);
+      }
+
+      .card-icon.gold {
+        background-color: var(--highlight);
+      }
+
+      .card-value {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--primary);
+      }
+
+      .card-description {
+        color: var(--dark-gray);
+        font-size: 0.9rem;
+      }
+
+      .recent-incidents-card .card-value {
+        color: var(--danger);
+      }
+
+      .recent-incidents-card .card-description {
+        min-height: 2.2em;
+      }
+
+      /* Main Sections */
+      .main-sections {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+
+      @media (min-width: 1200px) {
+        .main-sections {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .section {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        padding: 1.5rem;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .section-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--primary);
+      }
+
+      /* Table Responsive */
+      .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .vessels-table {
+        width: 100%;
+        min-width: 800px; /* Minimum width to prevent squishing */
+      }
+
+      .vessels-table th {
+        text-align: left;
+        padding: 0.8rem 1rem;
+        background-color: var(--light);
+        font-weight: 600;
+        color: var(--primary);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+      }
+
+      .vessels-table td {
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid var(--gray);
+        font-size: 0.95rem;
+      }
+
+      .vessels-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .vessels-table tr:hover td {
+        background-color: rgba(70, 130, 180, 0.05);
+      }
+
+      .status-badge {
+        display: inline-block;
+        padding: 0.3rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+
+      .status-badge.arrived {
+        background-color: rgba(45, 156, 90, 0.1);
+        color: var(--accent);
+      }
+
+      .status-badge.docked {
+        background-color: rgba(70, 130, 180, 0.1);
+        color: var(--light-blue);
+      }
+
+      .status-badge.in-transit {
+        background-color: rgba(212, 175, 55, 0.1);
+        color: var(--highlight);
+      }
+      .filter-wrapper {
+        position: relative;
+        display: inline-block;
+        margin-left: 10px;
+      }
+
+      .filter-icon {
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: #34495e;
+      }
+
+      .filter-dropdown {
+        display: none;
+        position: absolute;
+        top: 25px;
+        right: 0;
+        background-color: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        border-radius: 8px;
+        z-index: 1000;
+        min-width: 150px;
+      }
+
+      /* Map Container */
+      #vessel-map {
+        height: 300px;
+        border-radius: 8px;
+        margin-top: 1rem;
+        z-index: 1;
+      }
+
+      /* Analytics Section Styles */
+      .analytics-section {
+        display: grid;
+        gap: 1.5rem;
+        margin-top: 2rem;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .chart-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .chart-card.full-width {
+        grid-column: 1 / -1;
+        width: 100%;
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .chart-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .chart-filter {
+        padding: 0.3rem 0.5rem;
+        border: 1px solid var(--gray);
+        border-radius: 4px;
+        font-size: 0.8rem;
+        background-color: white;
+      }
+
+      .chart-action-btn {
+        padding: 0.3rem 0.6rem;
+        border: 1px solid var(--gray);
+        border-radius: 4px;
+        font-size: 0.8rem;
+        background: white;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .chart-action-btn.active {
+        background-color: var(--secondary);
+        color: white;
+        border-color: var(--secondary);
+      }
+
+      .chart-action-btn:hover {
+        background-color: var(--light);
+      }
+
+      .chart-container {
+        position: relative;
+        height: 280px;
+        width: 100%;
+      }
+
+      canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .chart-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--gray);
+      }
+
+      .chart-stat {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .stat-value {
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: var(--primary);
+      }
+
+      .stat-label {
+        font-size: 0.8rem;
+        color: var(--dark-gray);
+      }
+
+      .chart-legend {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.8rem;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+
+      .chart-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        width: 100%;
+      }
+
+      .stat-item {
+        text-align: center;
+        padding: 0.5rem;
+        border-radius: 6px;
+        background-color: rgba(245, 245, 245, 0.5);
+      }
+
+      @media (max-width: 1024px) {
+        .analytics-section {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Responsive Adjustments */
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+        }
+
+        .sidebar {
+          width: 100%;
+          height: auto;
+          padding: 1rem;
+        }
+
+        .sidebar-collapsed {
+          width: 70%;
+        }
+
+        .nav-menu {
+          display: flex;
+          overflow-x: auto;
+          padding-bottom: 0.5rem;
+        }
+
+        .nav-item {
+          margin-bottom: 0;
+          margin-right: 0.5rem;
+        }
+
+        .nav-link {
+          white-space: nowrap;
+        }
+
+        .search-bar {
+          width: 200px;
+        }
+      }
+
+      /* Smooth transition for all section containers */
+      .section,
+      .card,
+      .dashboard-grid,
+      .analytics-section,
+      .chart-card {
+        transition: width 0.3s ease, max-width 0.3s ease;
+        box-sizing: border-box;
+      }
+
+      /* Add modal styles */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: flex-start;
+        z-index: 1000;
+        padding-top: 80px;
+        overflow-y: auto;
+      }
+
+      .modal {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 400px;
+        max-height: 80vh;
+        overflow-y: auto;
+        position: relative;
+        animation: modalAppear 0.3s ease;
+      }
+
+      @keyframes modalAppear {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem 1.5rem;
+        border-bottom: 1px solid var(--gray);
+      }
+
+      .modal-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--primary);
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        color: var(--dark-gray);
+        cursor: pointer;
+        opacity: 0.7;
+        transition: all 0.2s;
+      }
+
+      .modal-close:hover {
+        opacity: 1;
+        color: var(--danger);
+      }
+
+      .modal-body {
+        padding: 1.5rem;
+      }
+
+      .notification-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .notification-item {
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--gray);
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .notification-item:last-child {
+        border-bottom: none;
+      }
+
+      .notification-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .notification-icon.info {
+        background-color: rgba(70, 130, 180, 0.1);
+        color: var(--light-blue);
+      }
+
+      .notification-icon.warning {
+        background-color: rgba(212, 175, 55, 0.1);
+        color: var(--highlight);
+      }
+
+      .notification-icon.danger {
+        background-color: rgba(209, 67, 67, 0.1);
+        color: var(--danger);
+      }
+
+      .notification-content {
+        flex: 1;
+      }
+
+      .notification-title {
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 0.3rem;
+        font-size: 0.95rem;
+      }
+
+      .notification-message {
+        color: var(--dark-gray);
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .notification-time {
+        color: var(--dark-gray);
+        font-size: 0.8rem;
+        opacity: 0.7;
+      }
+
+      .modal-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid var(--gray);
+        text-align: center;
+      }
+
+      .modal-footer a {
+        color: var(--light-blue);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+      }
+
+      .modal-footer a:hover {
+        color: var(--secondary);
+        text-decoration: none;
+      }
+
+      .show-modal {
+        display: flex;
+      }
+      /* Improved Recent Incidents UI */
+      .incidents-feed {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+      }
+      .incident-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 18px rgba(10, 31, 68, 0.07),
+          0 1.5px 4px rgba(70, 130, 180, 0.07);
+        padding: 1.3rem 1.2rem 1.1rem 1.2rem;
+        position: relative;
+        /* border-left: 6px solid var(--gray); */
+        display: flex;
+        flex-direction: column;
+        min-width: 260px;
+        max-width: 100%;
+        transition: box-shadow 0.2s, transform 0.2s;
+      }
+      .incident-card:hover {
+        box-shadow: 0 8px 32px rgba(30, 58, 138, 0.13),
+          0 2px 8px rgba(45, 156, 90, 0.09);
+        transform: translateY(-2px) scale(1.015);
+      }
+      .incident-card .incident-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.7rem;
+      }
+      .incident-title {
+        font-size: 1.08rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 0.15rem;
+      }
+      .severity-badge {
+        display: inline-block;
+        padding: 0.22em 0.85em;
+        border-radius: 14px;
+        font-size: 0.85em;
+        font-weight: 600;
+        margin-left: 0.5em;
+        margin-right: 0.2em;
+        letter-spacing: 0.01em;
+        vertical-align: middle;
+      }
+      .severity-badge.critical {
+        background: rgba(209, 67, 67, 0.13);
+        color: var(--danger);
+      }
+      .severity-badge.high {
+        background: rgba(245, 158, 11, 0.13);
+        color: var(--warning);
+      }
+      .severity-badge.medium {
+        background: rgba(70, 130, 180, 0.13);
+        color: var(--light-blue);
+      }
+      .severity-badge.low {
+        background: rgba(45, 156, 90, 0.13);
+        color: var(--accent);
+      }
+      .incident-header > span {
+        font-size: 0.93rem;
+        color: var(--dark-gray);
+        opacity: 0.8;
+        margin-left: 1rem;
+        white-space: nowrap;
+      }
+      .incident-metadata {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem 1.2rem;
+        margin-bottom: 0.7rem;
+        font-size: 0.93rem;
+      }
+      .incident-metadata-item {
+        display: flex;
+        align-items: center;
+        gap: 0.4em;
+        color: var(--dark-gray);
+      }
+      .incident-metadata-item i {
+        color: var(--light-blue);
+        font-size: 1em;
+      }
+      .incident-description {
+        font-size: 0.97rem;
+        color: var(--primary);
+        margin-top: 0.2rem;
+      }
+      /* No colored left border for incident cards */
+      @media (max-width: 600px) {
+        .incident-card {
+          padding: 1rem 0.5rem 0.8rem 0.7rem;
+        }
+      }
+      .incident-severity-row {
+        margin-top: 0.25em;
+        margin-bottom: 0.1em;
+      }
+      /* Remove underline from View All Incidents button in section header */
+      .section-header .btn.btn-outline,
+      .section-header .btn.btn-outline:visited,
+      .section-header .btn.btn-outline:hover {
+        text-decoration: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Sidebar Navigation -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <div class="logo">
+            <i class="fas fa-anchor logo-icon"></i>
+            <span class="logo-text">Smart Port</span>
+            <button class="collapse-btn">
+              <i class="fas fa-bars"></i>
+            </button>
+          </div>
+        </div>
+
+        <ul class="nav-menu">
+          <li class="nav-item expanded">
+            <a href="#" class="nav-link active">
+              <i class="fas fa-tachometer-alt"></i>
+              <span>Dashboard</span>
+            </a>
+            <ul class="nav-sub-menu">
+              <li>
+                <a href="#mapSection" class="nav-sub-link">
+                  <i class="fas fa-map-marked-alt"></i>
+                  <span>Map</span>
+                </a>
+              </li>
+              <li>
+                <a href="#activeVesselsSection" class="nav-sub-link">
+                  <i class="fas fa-ship"></i>
+                  <span>Active Vessels</span>
+                </a>
+              </li>
+              <li>
+                <a href="#analyticsSection" class="nav-sub-link">
+                  <i class="fas fa-chart-bar"></i>
+                  <span>Analytics</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="vessels/view-vessels.html" class="nav-link">
+              <i class="fas fa-ship"></i>
+              <span>Vessels</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="shipping-details/submit-shipment.html" class="nav-link">
+              <i class="fas fa-file-alt"></i>
+              <span>Shipping Details</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              href="custom-clearance/manage-custom-clearance.html"
+              class="nav-link"
+            >
+              <i class="fas fa-clipboard-check"></i>
+              <span>Custom Clearance</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="reports/submit-incident-report.html" class="nav-link">
+              <i class="fas fa-exclamation-triangle"></i>
+              <span>Incident Reports</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-cog"></i>
+              <span>Settings</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/index.html" class="nav-link">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Main Content Area -->
+      <div class="main-content">
+        <!-- Top Bar -->
+        <div class="topbar">
+          <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search..." />
+          </div>
+
+          <div class="user-menu">
+            <button class="notification-btn">
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge">3</span>
+            </button>
+
+            <div class="user-profile">
+              <div class="user-avatar">AD</div>
+              <span class="user-name">Admin User</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+          <div class="page-header">
+            <div class="page-title">
+              <h1>Shipper Dashboard</h1>
+              <p>
+                Welcome back! Here's what's happening with your shipments today.
+              </p>
+            </div>
+            <button class="btn btn-secondary">
+              <i class="fas fa-plus"></i> New Shipment
+            </button>
+          </div>
+
+          <!-- Stats Cards -->
+          <div class="dashboard-grid">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Active Shipments</h3>
+                <div class="card-icon blue">
+                  <i class="fas fa-box"></i>
+                </div>
+              </div>
+              <div class="card-value">12</div>
+              <p class="card-description">3 arriving today</p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Pending Clearance</h3>
+                <div class="card-icon green">
+                  <i class="fas fa-clipboard-check"></i>
+                </div>
+              </div>
+              <div class="card-value">5</div>
+              <p class="card-description">Customs Processing</p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Total Vessels</h3>
+                <div class="card-icon gold">
+                  <i class="fas fa-ship"></i>
+                </div>
+              </div>
+              <div class="card-value">8</div>
+              <p class="card-description">Carrying your cargo</p>
+            </div>
+            <div
+              class="card recent-incidents-card"
+              style="cursor: pointer"
+              onclick="document.getElementById('recentIncidentsSection').scrollIntoView({behavior: 'smooth'});"
+            >
+              <div class="card-header">
+                <h3 class="card-title">Recent Incidents</h3>
+                <div class="card-icon danger">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </div>
+              </div>
+              <div class="card-value">3</div>
+              <p class="card-description">Latest: Cargo Container Damage</p>
+            </div>
+          </div>
+
+          <!-- Map Section -->
+          <div id="mapSection" class="section">
+            <div class="section-header">
+              <h2 class="section-title">Philippine Maritime Tracking</h2>
+              <div class="filter-wrapper">
+                <i class="fas fa-filter filter-icon" id="filterToggle"></i>
+                <div class="filter-dropdown" id="filterDropdown">
+                  <label
+                    ><input type="checkbox" name="filter" value="vessel" />
+                    Vessel Name</label
+                  ><br />
+                  <label
+                    ><input type="checkbox" name="filter" value="eta" />
+                    ETA</label
+                  ><br />
+                  <label
+                    ><input type="checkbox" name="filter" value="status" />
+                    Status</label
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div id="vessel-map"></div>
+          </div>
+
+          <!-- Main Sections -->
+          <div class="main-sections">
+            <!-- Vessels Section -->
+            <div id="activeVesselsSection" class="section">
+              <div class="section-header">
+                <h2 class="section-title">Your Active Shipments</h2>
+                <button class="btn btn-outline">View All</button>
+              </div>
+
+              <div class="table-responsive">
+                <table class="vessels-table">
+                  <thead>
+                    <tr>
+                      <th>Vessel Name</th>
+                      <th>Cargo Type</th>
+                      <th>Origin</th>
+                      <th>Destination</th>
+                      <th>Status</th>
+                      <th>ETA</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Manila Bay Express</td>
+                      <td>Electronics</td>
+                      <td>Hong Kong</td>
+                      <td>Manila</td>
+                      <td><span class="status-badge arrived">Arrived</span></td>
+                      <td>Today, 08:45</td>
+                    </tr>
+                    <tr>
+                      <td>Cebu Pearl</td>
+                      <td>Textiles</td>
+                      <td>Singapore</td>
+                      <td>Cebu</td>
+                      <td><span class="status-badge docked">Docked</span></td>
+                      <td>Today, 11:30</td>
+                    </tr>
+                    <tr>
+                      <td>Mindanao Explorer</td>
+                      <td>Machinery</td>
+                      <td>Kaohsiung</td>
+                      <td>Davao</td>
+                      <td>
+                        <span class="status-badge in-transit">In Transit</span>
+                      </td>
+                      <td>Tomorrow, 14:15</td>
+                    </tr>
+                    <tr>
+                      <td>Visayas Navigator</td>
+                      <td>Auto Parts</td>
+                      <td>Jakarta</td>
+                      <td>Iloilo</td>
+                      <td>
+                        <span class="status-badge in-transit">In Transit</span>
+                      </td>
+                      <td>May 18, 09:00</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Charts Section -->
+              <div id="analyticsSection" class="analytics-section">
+                <!-- Row 1 -->
+                <div class="card chart-card">
+                  <div class="card-header">
+                    <h3 class="card-title">Monthly Shipping Volume</h3>
+                    <div class="chart-actions">
+                      <select class="chart-filter">
+                        <option>Last 6 Months</option>
+                        <option>Last Year</option>
+                        <option>Custom Range</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="chart-container">
+                    <canvas id="shipmentChart" height="250"></canvas>
+                  </div>
+                  <div class="chart-footer">
+                    <div class="chart-stat">
+                      <span class="stat-value">+15.3%</span>
+                      <span class="stat-label">vs last period</span>
+                    </div>
+                    <div class="chart-legend">
+                      <span class="legend-item"
+                        ><i class="fas fa-square" style="color: #1e3a8a"></i>
+                        Current</span
+                      >
+                      <span class="legend-item"
+                        ><i class="fas fa-square" style="color: #8ca6db"></i>
+                        Previous</span
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card chart-card">
+                  <div class="card-header">
+                    <h3 class="card-title">Cargo Type Distribution</h3>
+                  </div>
+                  <div class="chart-container">
+                    <canvas id="vesselChart" height="250"></canvas>
+                  </div>
+                  <div class="chart-footer">
+                    <div class="chart-stats-grid">
+                      <div class="stat-item">
+                        <div class="stat-value" style="color: #2d9c5a">45%</div>
+                        <div class="stat-label">Electronics</div>
+                      </div>
+                      <div class="stat-item">
+                        <div class="stat-value" style="color: #fcddb0">30%</div>
+                        <div class="stat-label">Textiles</div>
+                      </div>
+                      <div class="stat-item">
+                        <div class="stat-value" style="color: #d14343">25%</div>
+                        <div class="stat-label">Others</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="card chart-card full-width">
+                  <div class="card-header">
+                    <h3 class="card-title">Clearance Processing Time</h3>
+                    <div class="chart-actions">
+                      <select class="chart-filter">
+                        <option>Last 6 Months</option>
+                        <option>Last Year</option>
+                        <option>All Time</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="chart-container">
+                    <canvas id="incidentChart" height="300"></canvas>
+                  </div>
+                  <div class="chart-footer">
+                    <div class="chart-stat">
+                      <span class="stat-value" style="color: #4682b4"
+                        >-2.5 days</span
+                      >
+                      <span class="stat-label">average processing time</span>
+                    </div>
+                    <div class="chart-legend">
+                      <span class="legend-item"
+                        ><i class="fas fa-square" style="color: #4682b4"></i>
+                        Processing Time</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Recent Incidents Section -->
+          <div
+            id="recentIncidentsSection"
+            class="section"
+            style="margin-top: 2rem"
+          >
+            <div class="section-header">
+              <h2 class="section-title">Recent Incidents</h2>
+              <a href="reports/view-incident-feed.html" class="btn btn-outline"
+                >View All Incidents</a
+              >
+            </div>
+            <div
+              class="incidents-feed"
+              style="display: flex; flex-wrap: wrap; gap: 1.5rem"
+            >
+              <div class="incident-card critical" style="flex: 1 1 300px">
+                <div class="incident-header">
+                  <div>
+                    <h3 class="incident-title">
+                      Cargo Container Damage on Manila Bay Express
+                    </h3>
+                    <div class="incident-severity-row">
+                      <span class="severity-badge critical"
+                        ><i
+                          class="fas fa-exclamation-triangle"
+                          style="margin-right: 0.4em"
+                        ></i
+                        >Critical</span
+                      >
+                    </div>
+                  </div>
+                  <span>2023-05-12, 14:30</span>
+                </div>
+                <div class="incident-metadata">
+                  <div class="incident-metadata-item">
+                    <i class="fas fa-tag"></i>
+                    <span>Type: Cargo Damage</span>
+                  </div>
+                  <div class="incident-metadata-item">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>Status: Open</span>
+                  </div>
+                  <div class="incident-metadata-item">
+                    <i class="fas fa-ship"></i>
+                    <span>Vessel: Manila Bay Express</span>
+                  </div>
+                  <div class="incident-metadata-item">
+                    <i class="fas fa-user"></i>
+                    <span>Reported by: John Smith</span>
+                  </div>
+                </div>
+                <div class="incident-description">
+                  Three containers (IDs: MSKU7542198, MSKU8721654, MSKU9102345)
+                  on the Manila Bay Express suffered significant damage during
+                  offloading due to equipment malfunction. Contents appear to be
+                  affected. Immediate assessment required.
+                </div>
+              </div>
+              <div class="incident-card high" style="flex: 1 1 300px">
+                <div class="incident-header">
+                  <div>
+                    <h3 class="incident-title">
+                      Significant Port Delay for Cebu Pearl
+                    </h3>
+                    <div class="incident-severity-row">
+                      <span class="severity-badge high"
+                        ><i
+                          class="fas fa-exclamation-circle"
+                          style="margin-right: 0.4em"
+                        ></i
+                        >High</span
+                      >
+                    </div>
+                  </div>
+                  <span>2023-05-10, 09:15</span>
+                </div>
+                <div class="incident-metadata">
+                  <div class="incident-metadata-item">
+                    <i class="fas fa-tag"></i>
+                    <span>Type: Delay</span>
+                  </div>
+                  <div class="incident-metadata-item">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>Status: In Progress</span>
+                  </div>
+                  <div class="incident-metadata-item">
+                    <i class="fas fa-ship"></i>
+                    <span>Vessel: Cebu Pearl</span>
+                  </div>
+                  <div class="incident-metadata-item">
+                    <i class="fas fa-user"></i>
+                    <span>Reported by: Maria Santos</span>
+                  </div>
+                </div>
+                <div class="incident-description">
+                  Cebu Pearl experienced a significant delay at the port due to
+                  customs inspection backlog. Estimated delay is 8 hours.
+                  Operations team is coordinating for expedited clearance.
+                </div>
+              </div>
+              <div class="incident-card medium" style="flex: 1 1 300px">
+                <div class="incident-header">
+                  <div>
+                    <h3 class="incident-title">
+                      Documentation Issue for Mindanao Explorer
+                    </h3>
+                    <div class="incident-severity-row">
+                      <span class="severity-badge medium"
+                        ><i
+                          class="fas fa-info-circle"
+                          style="margin-right: 0.4em"
+                        ></i
+                        >Medium</span
+                      >
+                    </div>
+                  </div>
+                  <span>2023-05-08, 16:00</span>
+                </div>
+                <div class="incident-metadata">
+                  <div class="incident-metadata-item">
+                    <i class="fas fa-tag"></i>
+                    <span>Type: Documentation</span>
+                  </div>
+                  <div class="incident-metadata-item">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>Status: Resolved</span>
+                  </div>
+                  <div class="incident-metadata-item">
+                    <i class="fas fa-ship"></i>
+                    <span>Vessel: Mindanao Explorer</span>
+                  </div>
+                  <div class="incident-metadata-item">
+                    <i class="fas fa-user"></i>
+                    <span>Reported by: Alex Lee</span>
+                  </div>
+                </div>
+                <div class="incident-description">
+                  Incorrect documentation was submitted for Mindanao Explorer's
+                  cargo manifest, causing a processing delay. Issue has been
+                  resolved and correct documents have been uploaded.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="notificationModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title">Notifications</h2>
+          <button class="modal-close" id="closeNotificationModal">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <ul class="notification-list">
+            <li class="notification-item">
+              <div class="notification-icon danger">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <div class="notification-content">
+                <h4 class="notification-title">Vessel Delay Alert</h4>
+                <p class="notification-message">
+                  Manila Bay Express has reported a delay due to weather
+                  conditions.
+                </p>
+                <span class="notification-time">10 minutes ago</span>
+              </div>
+            </li>
+            <li class="notification-item">
+              <div class="notification-icon info">
+                <i class="fas fa-info-circle"></i>
+              </div>
+              <div class="notification-content">
+                <h4 class="notification-title">New Manifest Uploaded</h4>
+                <p class="notification-message">
+                  Cebu Pearl has uploaded a new cargo manifest for review.
+                </p>
+                <span class="notification-time">1 hour ago</span>
+              </div>
+            </li>
+            <li class="notification-item">
+              <div class="notification-icon warning">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="notification-content">
+                <h4 class="notification-title">Inspection Scheduled</h4>
+                <p class="notification-message">
+                  Scheduled inspection for Mindanao Explorer at Dock 3 tomorrow.
+                </p>
+                <span class="notification-time">3 hours ago</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <a href="#">View All Notifications</a>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+      // Initialize all charts
+      function initCharts() {
+        // Shipment Volume Bar Chart
+        const shipmentCtx = document
+          .getElementById("shipmentChart")
+          .getContext("2d");
+        const shipmentChart = new Chart(shipmentCtx, {
+          type: "bar",
+          data: {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            datasets: [
+              {
+                label: "Current",
+                data: [120, 150, 180, 210, 190, 240],
+                backgroundColor: "#1E3A8A",
+                borderRadius: 4,
+              },
+              {
+                label: "Previous",
+                data: [100, 130, 150, 180, 170, 200],
+                backgroundColor: "#8CA6DB",
+                borderRadius: 4,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+              duration: 300,
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                mode: "index",
+                intersect: false,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: "#f0f0f0",
+                  drawBorder: false,
+                },
+                ticks: {
+                  stepSize: 50,
+                },
+              },
+              x: {
+                grid: { display: false },
+                ticks: {
+                  color: "#6B7280",
+                },
+              },
+            },
+          },
+        });
+
+        // Cargo Type Distribution Doughnut Chart
+        const vesselCtx = document
+          .getElementById("vesselChart")
+          .getContext("2d");
+        const vesselChart = new Chart(vesselCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["Electronics", "Textiles", "Others"],
+            datasets: [
+              {
+                data: [45, 30, 25],
+                backgroundColor: ["#2D9C5A", "#FCDDB0", "#D14343"],
+                borderWidth: 0,
+                cutout: "70%",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+              duration: 300,
+            },
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: {
+                  boxWidth: 12,
+                  padding: 20,
+                  font: {
+                    size: 12,
+                    family: "'Montserrat', sans-serif",
+                  },
+                  color: "#0A1F44",
+                },
+              },
+            },
+          },
+        });
+
+        // Clearance Processing Time Line Chart
+        const incidentCtx = document
+          .getElementById("incidentChart")
+          .getContext("2d");
+        const incidentChart = new Chart(incidentCtx, {
+          type: "line",
+          data: {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            datasets: [
+              {
+                label: "Processing Days",
+                data: [7, 6.5, 5.8, 5.2, 4.8, 4.5],
+                fill: false,
+                borderColor: "#4682B4",
+                tension: 0.3,
+                pointBackgroundColor: "#4682B4",
+                pointBorderColor: "#fff",
+                pointHoverRadius: 6,
+                pointRadius: 4,
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+              duration: 300,
+            },
+            plugins: {
+              legend: { display: false },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: "#f0f0f0",
+                  drawBorder: false,
+                },
+                title: {
+                  display: true,
+                  text: "Days",
+                },
+              },
+              x: {
+                grid: { display: false },
+              },
+            },
+          },
+        });
+
+        return [shipmentChart, vesselChart, incidentChart];
+      }
+
+      // Toggle sidebar collapse
+      document.addEventListener("DOMContentLoaded", function () {
+        const charts = initCharts();
+        const sidebar = document.querySelector(".sidebar");
+        const mainContent = document.querySelector(".main-content");
+        const navItems = document.querySelectorAll(".nav-item");
+        // --- Ensure only one submenu is expanded on load based on active link ---
+        // Collapse all submenus first
+        navItems.forEach((item) => {
+          item.classList.remove("expanded");
+          const sub = item.querySelector(".nav-sub-menu");
+          if (sub) sub.style.height = "0";
+        });
+        // Find the nav-link.active or nav-sub-link.active and expand its parent
+        const activeLink = document.querySelector(
+          ".nav-link.active, .nav-sub-link.active"
+        );
+        if (activeLink) {
+          let parentNavItem = activeLink.closest(".nav-item");
+          if (parentNavItem) {
+            parentNavItem.classList.add("expanded");
+            const sub = parentNavItem.querySelector(".nav-sub-menu");
+            if (sub) sub.style.height = "auto";
+          }
+        }
+
+        document
+          .querySelector(".collapse-btn")
+          .addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // Apply transitions
+            sidebar.classList.toggle("sidebar-collapsed");
+            mainContent.classList.toggle("sidebar-collapsed-content");
+
+            // Force a reflow for smooth transitions
+            void sidebar.offsetWidth;
+
+            // Check for and fix expanded items when sidebar collapses
+            if (sidebar.classList.contains("sidebar-collapsed")) {
+              // Reset expanded nav items when sidebar collapses
+              document
+                .querySelectorAll(".nav-item.expanded")
+                .forEach((item) => {
+                  if (window.getComputedStyle(sidebar).width === "80px") {
+                    // Keep the expanded class for hover effect but collapse the height
+                    item.querySelector(".nav-sub-menu").style.height = "0";
+                  }
+                });
+            }
+
+            // Resize charts after sidebar toggle animation completes
+            setTimeout(() => {
+              window.dispatchEvent(new Event("resize"));
+              charts.forEach((chart) => {
+                chart.resize();
+                chart.render();
+              });
+            }, 350);
+          });
+
+        // Submenu toggle functionality (only one open at a time, clicking main closes others)
+        navItems.forEach((item) => {
+          const link = item.querySelector(".nav-link");
+          const hasSubmenu = item.querySelector(".nav-sub-menu");
+          if (hasSubmenu) {
+            link.addEventListener("click", function (e) {
+              // If the link has a real URL (not just #), navigate to it
+              if (
+                this.getAttribute("href") &&
+                this.getAttribute("href") !== "#"
+              ) {
+                window.location.href = this.getAttribute("href");
+                return;
+              }
+              e.preventDefault();
+              // Remove expanded from all other nav-items
+              navItems.forEach((otherItem) => {
+                if (
+                  otherItem !== item &&
+                  otherItem.classList.contains("expanded")
+                ) {
+                  otherItem.classList.remove("expanded");
+                  const otherSub = otherItem.querySelector(".nav-sub-menu");
+                  if (otherSub) otherSub.style.height = "0";
+                }
+              });
+              // Remove active from all sub-links
+              document.querySelectorAll(".nav-sub-link").forEach((subLink) => {
+                subLink.classList.remove("active");
+              });
+              // Toggle this one
+              if (!sidebar.classList.contains("sidebar-collapsed")) {
+                item.classList.toggle("expanded");
+                const sub = item.querySelector(".nav-sub-menu");
+                if (sub) {
+                  if (item.classList.contains("expanded")) {
+                    sub.style.height = "auto";
+                  } else {
+                    sub.style.height = "0";
+                  }
+                }
+              }
+            });
+          } else if (link) {
+            // Handle direct navigation for links without submenus
+            link.addEventListener("click", function (e) {
+              if (
+                this.getAttribute("href") &&
+                this.getAttribute("href") !== "#"
+              ) {
+                // No need to prevent default - let browser navigate normally
+              } else {
+                e.preventDefault();
+              }
+            });
+          }
+        });
+
+        // Track if user has manually clicked a sub-nav link
+        let userHasClickedSubNav = false;
+
+        // Navigation handling for sub-links
+        document.querySelectorAll(".nav-sub-link").forEach((link) => {
+          link.addEventListener("click", function (e) {
+            // Check if this is a real URL or a page anchor
+            const href = this.getAttribute("href");
+
+            if (href && !href.startsWith("#")) {
+              // It's a real URL, let navigation happen normally
+              return;
+            }
+
+            e.preventDefault();
+
+            // Set flag that user has interacted with navigation
+            userHasClickedSubNav = true;
+
+            // Remove active class from all sub links
+            document.querySelectorAll(".nav-sub-link").forEach((item) => {
+              item.classList.remove("active");
+            });
+
+            // Add active class to clicked link
+            this.classList.add("active");
+
+            const targetId = href;
+            const targetElement = document.querySelector(targetId);
+
+            if (targetElement) {
+              window.scrollTo({
+                top: targetElement.offsetTop - 80,
+                behavior: "smooth",
+              });
+            }
+          });
+        });
+
+        // Set active submenu item on scroll, but only after user has interacted
+        window.addEventListener("scroll", function () {
+          // Don't update active link on initial page load scroll events
+          if (!userHasClickedSubNav && window.scrollY < 100) {
+            return;
+          }
+
+          const scrollPosition = window.scrollY;
+
+          // Get all sections
+          const sections = [
+            document.querySelector("#mapSection"),
+            document.querySelector("#activeVesselsSection"),
+            document.querySelector("#analyticsSection"),
+          ];
+
+          // Find the current section in view
+          let currentSection = null;
+          sections.forEach((section) => {
+            if (section) {
+              const sectionTop = section.offsetTop - 100;
+              const sectionBottom = sectionTop + section.offsetHeight;
+
+              if (
+                scrollPosition >= sectionTop &&
+                scrollPosition < sectionBottom
+              ) {
+                currentSection = section.id;
+              }
+            }
+          });
+
+          // Set active state on navigation only when user has clicked a sub-nav link
+          if (currentSection && userHasClickedSubNav) {
+            document.querySelectorAll(".nav-sub-link").forEach((link) => {
+              link.classList.remove("active");
+
+              if (link.getAttribute("href") === "#" + currentSection) {
+                link.classList.add("active");
+              }
+            });
+          }
+        });
+
+        // Initial layout state
+        if (window.innerWidth <= 768) {
+          sidebar.classList.add("sidebar-collapsed");
+          mainContent.classList.add("sidebar-collapsed-content");
+        }
+
+        // Handle window resize events
+        window.addEventListener("resize", function () {
+          // Resize charts on window resize
+          charts.forEach((chart) => {
+            chart.resize();
+          });
+        });
+
+        // Notification functionality handled separately            // See notification modal code below
+
+        // User profile dropdown functionality
+        document
+          .querySelector(".user-profile")
+          .addEventListener("click", function (e) {
+            e.stopPropagation();
+            // This would toggle a user dropdown in a real implementation
+            alert("User dropdown would appear here");
+          });
+      });
+
+      // Initialize map centered on Philippines
+      const map = L.map("vessel-map").setView([12.8797, 121.774], 6);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      const filterToggle = document.getElementById("filterToggle");
+      const filterDropdown = document.getElementById("filterDropdown");
+
+      filterToggle.addEventListener("click", () => {
+        filterDropdown.style.display =
+          filterDropdown.style.display === "block" ? "none" : "block";
+      });
+
+      // Optional: Click outside to close the dropdown
+      document.addEventListener("click", (e) => {
+        if (!document.querySelector(".filter-wrapper").contains(e.target)) {
+          filterDropdown.style.display = "none";
+        }
+      });
+      // Define Philippine territorial waters boundary (simplified polygon)
+      // This is an approximate boundary for demonstration purposes
+      const philTerritorialWaters = [
+        // Northern bounds
+        [21.1, 119.0],
+        [21.1, 127.0],
+        // Eastern bounds
+        [21.1, 127.0],
+        [4.2, 127.0],
+        // Southern bounds
+        [4.2, 127.0],
+        [4.2, 114.0],
+        // Western bounds
+        [4.2, 114.0],
+        [21.1, 119.0],
+      ];
+
+      // Philippine major ports with coordinates
+      const philippinePorts = {
+        Manila: [14.5995, 120.9842],
+        Cebu: [10.3157, 123.9054],
+        Davao: [7.0727, 125.6127],
+        Iloilo: [10.7202, 122.5621],
+        Subic: [14.7824, 120.2817],
+        Zamboanga: [6.9214, 122.079],
+        "Cagayan de Oro": [8.4542, 124.6319],
+        Batangas: [13.7565, 121.0583],
+      };
+
+      // Add vessel markers for Philippine locations
+      const vesselMarkers = [
+        {
+          name: "Manila Bay Express",
+          position: [14.5995, 120.9842], // Manila
+          status: "arrived",
+          icon: L.divIcon({
+            html: '<i class="fas fa-ship" style="color: #2D9C5A; font-size: 24px;"></i>',
+            className: "vessel-marker",
+            iconSize: [24, 24],
+          }),
+        },
+        {
+          name: "Cebu Pearl",
+          position: [10.3157, 123.9054], // Cebu
+          status: "docked",
+          icon: L.divIcon({
+            html: '<i class="fas fa-ship" style="color: #4682B4; font-size: 24px;"></i>',
+            className: "vessel-marker",
+            iconSize: [24, 24],
+          }),
+        },
+        {
+          name: "Mindanao Explorer",
+          position: [12.5, 123.0], // Off Samar coast
+          status: "in-transit",
+          icon: L.divIcon({
+            html: '<i class="fas fa-ship" style="color: #D4AF37; font-size: 24px;"></i>',
+            className: "vessel-marker",
+            iconSize: [24, 24],
+          }),
+        },
+        {
+          name: "Visayas Navigator",
+          position: [11.2, 123.7], // Between Panay and Negros
+          status: "in-transit",
+          icon: L.divIcon({
+            html: '<i class="fas fa-ship" style="color: #D4AF37; font-size: 24px;"></i>',
+            className: "vessel-marker",
+            iconSize: [24, 24],
+          }),
+        },
+      ];
+
+      // Add vessel markers to the map
+      vesselMarkers.forEach((vessel) => {
+        const marker = L.marker(vessel.position, {
+          icon: vessel.icon,
+          title: vessel.name,
+        }).addTo(map);
+
+        // Add popup with vessel info
+        marker.bindPopup(
+          `<div style="font-family: 'Montserrat', sans-serif;">
+                    <h4 style="margin: 0 0 5px 0; font-family: 'Exo 2', sans-serif;">${
+                      vessel.name
+                    }</h4>
+                    <p style="margin: 0 0 3px 0; font-size: 0.9em;">
+                        <strong>Status:</strong> 
+                        <span style="color: ${
+                          vessel.status === "arrived"
+                            ? "#2D9C5A"
+                            : vessel.status === "docked"
+                            ? "#4682B4"
+                            : "#D4AF37"
+                        }">
+                            ${
+                              vessel.status === "arrived"
+                                ? "Arrived"
+                                : vessel.status === "docked"
+                                ? "Docked"
+                                : "In Transit"
+                            }
+                        </span>
+                    </p>
+                    <p style="margin: 0; font-size: 0.9em;">
+                        <strong>Location:</strong> 
+                        ${vessel.position[0].toFixed(
+                          4
+                        )}°N, ${vessel.position[1].toFixed(4)}°E
+                    </p>
+                </div>`
+        );
+      });
+
+      // Add port markers
+      Object.entries(philippinePorts).forEach(([portName, coords]) => {
+        L.marker(coords, {
+          icon: L.divIcon({
+            html: '<i class="fas fa-anchor" style="color: #1E3A8A; font-size: 20px;"></i>',
+            className: "port-marker",
+            iconSize: [20, 20],
+          }),
+        })
+          .addTo(map)
+          .bindPopup(`<b>${portName} Port</b>`);
+      });
+
+      // Add territorial waters polygon
+      L.polygon(philTerritorialWaters, {
+        color: "#1E3A8A",
+        fillColor: "#1E3A8A",
+        fillOpacity: 0.1,
+        weight: 1,
+        dashArray: "5, 5",
+      })
+        .addTo(map)
+        .bindPopup("<b>Philippine Territorial Waters</b>");
+
+      // Simulate vessel movement for demo purposes
+      function simulateVesselMovement() {
+        // Move Mindanao Explorer eastward
+        const mindanaoExplorer = vesselMarkers.find(
+          (v) => v.name === "Mindanao Explorer"
+        );
+        if (mindanaoExplorer) {
+          mindanaoExplorer.position[1] += 0.05;
+          if (mindanaoExplorer.position[1] > 125.0) {
+            mindanaoExplorer.position[1] = 123.0;
+          }
+        }
+
+        // Move Visayas Navigator northward
+        const visayasNavigator = vesselMarkers.find(
+          (v) => v.name === "Visayas Navigator"
+        );
+        if (visayasNavigator) {
+          visayasNavigator.position[0] += 0.03;
+          if (visayasNavigator.position[0] > 11.8) {
+            visayasNavigator.position[0] = 11.2;
+          }
+        }
+
+        // Update map markers
+        map.eachLayer((layer) => {
+          if (layer instanceof L.Marker && layer.options.title) {
+            const vessel = vesselMarkers.find(
+              (v) => v.name === layer.options.title
+            );
+            if (vessel) {
+              layer.setLatLng(vessel.position);
+            }
+          }
+        });
+      }
+
+      // Update vessel positions every 5 seconds
+      setInterval(simulateVesselMovement, 5000);
+
+      // Notification modal functionality
+      const notificationModal = document.getElementById("notificationModal");
+      const notificationBtn = document.querySelector(".notification-btn");
+      const closeModalBtn = document.getElementById("closeNotificationModal");
+
+      // Function to show the notification modal
+      function openNotificationModal() {
+        notificationModal.classList.add("show-modal");
+      }
+
+      // Function to close the notification modal
+      function closeNotificationModal() {
+        notificationModal.classList.remove("show-modal");
+      }
+
+      // Close modal when clicking outside
+      function clickOutside(e) {
+        if (e.target === notificationModal) {
+          closeNotificationModal();
+        }
+      }
+
+      // Event listeners
+      notificationBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        openNotificationModal();
+      });
+
+      closeModalBtn.addEventListener("click", closeNotificationModal);
+      window.addEventListener("click", clickOutside);
+
+      // Add escape key to close modal
+      document.addEventListener("keydown", function (e) {
+        if (
+          e.key === "Escape" &&
+          notificationModal.classList.contains("show-modal")
+        ) {
+          closeNotificationModal();
+        }
+      });
+    </script>
+  </body>
+</html>

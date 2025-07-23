@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>View Vessels | Smart Port</title>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/view-vessel.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="../shipper-dashboard.html" class="logo" style="text-decoration: none; color: white;">
+                    <i class="fas fa-anchor logo-icon"></i>
+                    <span class="logo-text">Smart Port</span>
+                </a>
+                <button class="collapse-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="../shipper-dashboard.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link active" data-target-submenu="vesselsSubMenu">
+                        <i class="fas fa-ship"></i>
+                        <span>Vessels</span>
+                    </a>
+                    <ul class="sub-menu open" id="vesselsSubMenu">
+                        <li><a href="view-vessels.html" class="nav-link active"><i class="fas fa-list-ul"></i><span>View All Vessels</span></a></li>
+                        <li><a href="request-vessel-info.html" class="nav-link"><i class="fas fa-question-circle"></i><span>Request Vessel Info</span></a></li>
+                        <li><a href="confirm-cargo-delivery.html" class="nav-link"><i class="fas fa-check-circle"></i><span>Confirm Cargo</span></a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link active" data-target-submenu="shippingDetailsSubMenu">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Shipping Details</span>
+                    </a>
+                    <ul class="sub-menu open" id="shippingDetailsSubMenu">
+                        <li><a href="../shipping-details/view-shipments.html" class="nav-link"><i class="fas fa-list-alt"></i><span>Shipment History</span></a></li>
+                        <li><a href="../shipping-details/submit-shipment.html" class="nav-link"><i class="fas fa-edit"></i><span>Submit Shipment</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link" data-target-submenu="customClearanceSubMenu">
+                        <i class="fas fa-clipboard-check"></i>
+                        <span>Custom Clearance</span>
+                    </a>
+                    <ul class="sub-menu" id="customClearanceSubMenu">
+                        <li><a href="../custom-clearance/view-custom-clearance.html" class="nav-link"><i class="fas fa-eye"></i><span>Clearance Status</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link" data-target-submenu="reportsSubMenu">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports</span>
+                    </a>
+                    <ul class="sub-menu" id="reportsSubMenu">
+                        <li><a href="../reports/view-incident-feed.html" class="nav-link"><i class="fas fa-stream"></i><span>View Incident Feed</span></a></li>
+                        <li><a href="../reports/submit-incident-report.html" class="nav-link"><i class="fas fa-file-medical-alt"></i><span>Submit Incident Report</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../../index.html" class="nav-link">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="topbar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search vessels...">
+                </div>
+                
+                <div class="user-menu">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">2</span>
+                    </button>
+                    
+                    <div class="user-profile">                        
+                        <div class="user-avatar">SH</div>                        
+                        <span class="user-name">Shipper User</span>                    
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page Content -->
+            <div class="dashboard-content">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1>View All Vessels</h1>
+                        <p>Track and monitor all vessels in your network</p>
+                    </div>
+                </div>
+                
+                <!-- Filters -->
+                <div class="filters">
+                    <div class="filter-group">
+                        <span class="filter-label">Vessel Type:</span>
+                        <select class="filter-select">
+                            <option value="">All Types</option>
+                            <option value="container">Container Ship</option>
+                            <option value="bulk">Bulk Carrier</option>
+                            <option value="tanker">Tanker</option>
+                            <option value="passenger">Passenger</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <span class="filter-label">Status:</span>
+                        <select class="filter-select">
+                            <option value="">All Status</option>
+                            <option value="in-transit">In Transit</option>
+                            <option value="arrived">Arrived</option>
+                            <option value="docked">Docked</option>
+                            <option value="departed">Departed</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <span class="filter-label">Origin:</span>
+                        <select class="filter-select">
+                            <option value="">All Origins</option>
+                            <option value="hong-kong">Hong Kong</option>
+                            <option value="singapore">Singapore</option>
+                            <option value="kaohsiung">Kaohsiung</option>
+                            <option value="jakarta">Jakarta</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <span class="filter-label">Destination:</span>
+                        <select class="filter-select">
+                            <option value="">All Destinations</option>
+                            <option value="manila">Manila</option>
+                            <option value="cebu">Cebu</option>
+                            <option value="davao">Davao</option>
+                            <option value="iloilo">Iloilo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="vessels-card-grid">
+                    <!-- Manila Bay Express -->
+                    <div class="vessel-card">
+                        <img class="vessel-image" src="https://wallpaperaccess.com/full/6303216.jpg" alt="Manila Bay Express">
+                        <div class="vessel-info">
+                            <div class="vessel-name">Manila Bay Express</div>
+                            <div class="vessel-imo">IMO: 1234567</div>
+                            <div class="vessel-action">
+                                <a href="request-vessel-info.html" class="vessel-action-btn" title="Request Info">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cebu Pearl -->
+                    <div class="vessel-card">
+                        <img class="vessel-image" src="https://img.offshore-mag.com/files/base/ebm/os/image/2022/08/16x9/grand_canyon_vessel.630521c904b38.png?auto=format,compress&fit=fill&fill=blur&w=1200&h=630" alt="Cebu Pearl">
+                        <div class="vessel-info">
+                            <div class="vessel-name">Cebu Pearl</div>
+                            <div class="vessel-imo">IMO: 2345678</div>
+                            <div class="vessel-action">
+                                <a href="request-vessel-info.html" class="vessel-action-btn" title="Request Info">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Mindanao Explorer -->
+                    <div class="vessel-card">
+                        <img class="vessel-image" src="https://images-global.nhst.tech/image/ZEJzMm1lRTRJcW1iTUtRRHNPWitod1grNElJcmYyZEZabFlybEprNE11Zz0=/nhst/binary/f2905c101a3a95a15bc102882ea06515" alt="Mindanao Explorer">
+                        <div class="vessel-info">
+                            <div class="vessel-name">Mindanao Explorer</div>
+                            <div class="vessel-imo">IMO: 3456789</div>
+                            <div class="vessel-action">
+                                <a href="request-vessel-info.html" class="vessel-action-btn" title="Request Info">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Visayas Navigator -->
+                    <div class="vessel-card">
+                        <img class="vessel-image" src="https://haulx.co/my/wp-content/uploads/2024/07/Container-Ships.jpg" alt="Visayas Navigator">
+                        <div class="vessel-info">
+                            <div class="vessel-name">Visayas Navigator</div>
+                            <div class="vessel-imo">IMO: 4567890</div>
+                            <div class="vessel-action">
+                                <a href="request-vessel-info.html" class="vessel-action-btn" title="Request Info">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Philippines Pioneer -->
+                    <div class="vessel-card">
+                        <img class="vessel-image" src="https://cdna.artstation.com/p/assets/images/images/044/056/322/large/jake-leo-finale-composition1080p.jpg?1638977185" alt="Philippines Pioneer">
+                        <div class="vessel-info">
+                            <div class="vessel-name">Philippines Pioneer</div>
+                            <div class="vessel-imo">IMO: 5678901</div>
+                            <div class="vessel-action">
+                                <a href="request-vessel-info.html" class="vessel-action-btn" title="Request Info">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Vessels Card Grid -->
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="js/view-vessel.js"></script>
+</body>
+</html> 

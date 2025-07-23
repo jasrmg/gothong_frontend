@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>View Shipments | Smart Port</title>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/view-shipment.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="../shipper-dashboard.html" class="logo" style="text-decoration: none; color: white;">
+                    <i class="fas fa-anchor logo-icon"></i>
+                    <span class="logo-text">Smart Port</span>
+                </a>
+                <button class="collapse-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="../shipper-dashboard.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link" data-target-submenu="vesselsSubMenu">
+                        <i class="fas fa-ship"></i>
+                        <span>Vessels</span>
+                    </a>
+                    <ul class="sub-menu" id="vesselsSubMenu">
+                        <li><a href="../vessels/view-vessels.html" class="nav-link"><i class="fas fa-list-ul"></i><span>View All Vessels</span></a></li>
+                        <li><a href="../vessels/request-vessel-info.html" class="nav-link"><i class="fas fa-question-circle"></i><span>Request Vessel Info</span></a></li>
+                        <li><a href="../vessels/confirm-cargo-delivery.html" class="nav-link"><i class="fas fa-check-circle"></i><span>Confirm Cargo</span></a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link active" data-target-submenu="shippingDetailsSubMenu">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Shipping Details</span>
+                    </a>
+                    <ul class="sub-menu open" id="shippingDetailsSubMenu">
+                        <li><a href="submit-shipment.html" class="nav-link "><i class="fas fa-edit"></i><span>Submit Shipment</span></a></li>
+                        <li><a href="view-shipments.html" class="nav-link active"><i class="fas fa-list-alt"></i><span>Shipment History</span></a></li>
+
+                    </ul>
+                </li>
+                <li class="nav-item has-submenu">                    
+                    <a href="#" class="nav-link" data-target-submenu="customClearanceSubMenu">                        
+                        <i class="fas fa-clipboard-check"></i>                        
+                        <span>Custom Clearance</span>                    
+                    </a>                    
+                    <ul class="sub-menu" id="customClearanceSubMenu">                        
+                        <li><a href="../custom-clearance/view-custom-clearance.html" class="nav-link">
+                            <i class="fas fa-eye"></i>
+                            <span>Clearance Status</span></a>
+                        </li>                    
+                    </ul>                
+                </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link" data-target-submenu="reportsSubMenu">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports</span>
+                    </a>
+                    <ul class="sub-menu" id="reportsSubMenu">
+                        <li><a href="../reports/view-incident-feed.html" class="nav-link"><i class="fas fa-stream"></i><span>View Incident Feed</span></a></li>
+                        <li><a href="../reports/submit-incident-report.html" class="nav-link"><i class="fas fa-file-medical-alt"></i><span>Submit Incident Report</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../../index.html" class="nav-link">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="topbar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search shipments..." id="searchInput">
+                </div>
+                
+                <div class="user-menu">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">2</span>
+                    </button>
+                    
+                    <div class="user-profile">
+                        <div class="user-avatar">SH</div>
+                        <span class="user-name">Shipper User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page Content -->
+            <div class="dashboard-content">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1>Shipping Details</h1>
+                        <p>View and manage all of your shipments</p>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <!--
+                        <a href="upload-shipment-docs.html" class="btn btn-outline">
+                            <i class="fas fa-upload"></i> Upload Documents
+                        </a>
+                        <a href="manage-shipping-details.html" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> New Shipment
+                        </a>
+                        -->
+                    </div>
+                </div>
+                
+                <!-- Filters -->
+                <div class="filters">
+                    <div class="filter-group">
+                        <span class="filter-label">Status:</span>
+                        <select class="filter-select" id="statusFilter">
+                            <option value="">All Statuses</option>
+                            <option value="completed">Completed</option>
+                            <option value="in-transit">In Transit</option>
+                            <option value="processing">Processing</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <span class="filter-label">Origin:</span>
+                        <select class="filter-select" id="originFilter">
+                            <option value="">All Origins</option>
+                            <option value="Hong Kong">Hong Kong</option>
+                            <option value="Singapore">Singapore</option>
+                            <option value="Kaohsiung">Kaohsiung</option>
+                            <option value="Jakarta">Jakarta</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <span class="filter-label">Destination:</span>
+                        <select class="filter-select" id="destinationFilter">
+                            <option value="">All Destinations</option>
+                            <option value="Manila">Manila</option>
+                            <option value="Cebu">Cebu</option>
+                            <option value="Davao">Davao</option>
+                            <option value="Iloilo">Iloilo</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <span class="filter-label">Date Range:</span>
+                        <select class="filter-select" id="dateFilter">
+                            <option value="">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="quarter">Last 3 Months</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Submanifest Card List Section -->
+                <div id="submanifest-list-section">
+                    <div style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+                        <h2 style="font-size: 1.3rem; color: var(--primary);">Your Shipments</h2>
+                    </div>
+                    <div id="submanifest-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;">
+                        <!-- Cards will be rendered here by JS -->
+                    </div>
+                </div>
+
+                <!-- Submanifest Detail Section (hidden initially) -->
+                <div id="submanifest-detail-section" style="display: none;">
+                    <div class="voyage-report-detail-container">
+                        <div class="back-button-container" style="margin-bottom: 1.5rem;">
+                            <button class="btn btn-outline" id="back-to-list-btn"><i class="fas fa-arrow-left"></i> Back to Shipments</button>
+                        </div>
+                        <h2 class="report-section-title" id="detail-submanifest-id">Submanifest ID: </h2>
+                        <h3 class="report-section-title">Shipment Details</h3>
+                        <table class="detail-table" style="margin-bottom: 2rem;">
+                            <tbody>
+                                <tr><th>Consignee</th><td id="detail-consignee"></td></tr>
+                                <tr><th>Created At</th><td id="detail-created-at"></td></tr>
+                                <tr><th>Status</th><td id="detail-status"></td></tr>
+                                <tr><th>Custom Clearance</th><td id="detail-custom-clearance"></td></tr>
+                            </tbody>
+                        </table>
+                        <h3 class="report-section-title">Related Documents</h3>
+                        <ul id="detail-related-docs" style="padding-left: 1.2rem; margin-bottom: 0.5rem;"></ul>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="js/view-shipment.js"></script>
+</body>
+</html> 

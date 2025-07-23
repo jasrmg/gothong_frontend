@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Submit Shipment | Smart Port</title>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/submit-shipment.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="../shipper-dashboard.html" class="logo" style="text-decoration: none; color: white;">
+                    <i class="fas fa-anchor logo-icon"></i>
+                    <span class="logo-text">Smart Port</span>
+                </a>
+                <button class="collapse-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="../shipper-dashboard.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link" data-target-submenu="vesselsSubMenu">
+                        <i class="fas fa-ship"></i>
+                        <span>Vessels</span>
+                    </a>
+                    <ul class="sub-menu" id="vesselsSubMenu">
+                        <li><a href="../vessels/view-vessels.html" class="nav-link"><i class="fas fa-list-ul"></i><span>View All Vessels</span></a></li>
+                        <li><a href="../vessels/request-vessel-info.html" class="nav-link"><i class="fas fa-question-circle"></i><span>Request Vessel Info</span></a></li>
+                        <li><a href="../vessels/confirm-cargo-delivery.html" class="nav-link"><i class="fas fa-check-circle"></i><span>Confirm Cargo</span></a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link active" data-target-submenu="shippingDetailsSubMenu">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Shipping Details</span>
+                    </a>
+                    <ul class="sub-menu open" id="shippingDetailsSubMenu">
+                        <li><a href="submit-shipment.html" class="nav-link active"><i class="fas fa-edit"></i><span>Submit Shipment</span></a></li>
+                        <li><a href="view-shipments.html" class="nav-link"><i class="fas fa-list-alt"></i><span>Shipment History</span></a></li>
+
+                    </ul>
+                </li>
+                <li class="nav-item has-submenu">                    
+                    <a href="#" class="nav-link" data-target-submenu="customClearanceSubMenu">                        
+                        <i class="fas fa-clipboard-check"></i>                        
+                        <span>Custom Clearance</span>                    
+                    </a>                    
+                    <ul class="sub-menu" id="customClearanceSubMenu">                        
+                        <li><a href="../custom-clearance/view-custom-clearance.html" class="nav-link">
+                            <i class="fas fa-eye"></i>
+                            <span>Clearance Status</span></a>
+                        </li>                    
+                    </ul>                
+                </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link" data-target-submenu="reportsSubMenu">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports</span>
+                    </a>
+                    <ul class="sub-menu" id="reportsSubMenu">
+                        <li><a href="../reports/view-incident-feed.html" class="nav-link"><i class="fas fa-stream"></i><span>View Incident Feed</span></a></li>
+                        <li><a href="../reports/submit-incident-report.html" class="nav-link"><i class="fas fa-file-medical-alt"></i><span>Submit Incident Report</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../../index.html" class="nav-link">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="topbar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search shipments..." id="searchInput">
+                </div>
+                
+                <div class="user-menu">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">2</span>
+                    </button>
+                    
+                    <div class="user-profile">
+                        <div class="user-avatar">SH</div>
+                        <span class="user-name">Shipper User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page Content -->
+            <div class="dashboard-content">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1>Submit Shipment</h1>
+                        <p>Fill in the shipment details to create a new submanifest</p>
+                    </div>
+                </div>
+
+                <form class="form-container">
+                    <!-- Shipper Details -->
+                    <div class="form-section">
+                        <h2 class="form-section-title">Shipper Details</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="shipperName">Shipper's Name</label>
+                                <input type="text" class="form-control" id="shipperName" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="shipperEmail">Shipper Email</label>
+                                <input type="email" class="form-control" id="shipperEmail" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="shipperAddress">Shipper's Address</label>
+                            <textarea class="form-control" id="shipperAddress" required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Consignee Details -->
+                    <div class="form-section">
+                        <h2 class="form-section-title">Consignee Details</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="consigneeName">Consignee Name</label>
+                                <input type="text" class="form-control" id="consigneeName" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="consigneeEmail">Consignee Email</label>
+                                <input type="email" class="form-control" id="consigneeEmail" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="consigneeAddress">Consignee Address</label>
+                            <textarea class="form-control" id="consigneeAddress" required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Cargo Details -->
+                    <div class="form-section">
+                        <h2 class="form-section-title">Cargo Details</h2>
+                        <div class="form-group">
+                            <label class="form-label" for="cargoDescription">Cargo Description</label>
+                            <textarea class="form-control" id="cargoDescription" required></textarea>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="quantity">Quantity</label>
+                                <input type="number" class="form-control" id="quantity" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="weight">Weight (kg)</label>
+                                <input type="number" class="form-control" id="weight" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="volume">Volume/Dimension (m³)</label>
+                                <input type="text" class="form-control" id="volume" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Booking Details -->
+                    <div class="form-section">
+                        <h2 class="form-section-title">Booking Details</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="referenceNumber">Reference Number</label>
+                                <input type="text" class="form-control" id="referenceNumber" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="bookingDate">Booking Date</label>
+                                <input type="date" class="form-control" id="bookingDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="vesselName">Vessel Name</label>
+                                <input type="text" class="form-control" id="vesselName" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shipment Route -->
+                    <div class="form-section">
+                        <h2 class="form-section-title">Shipment Route and Destination</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="portOrigin">Port of Origin</label>
+                                <select class="form-control" id="portOrigin" required>
+                                    <option value="">Select Port of Origin</option>
+                                    <option value="Hong Kong">Hong Kong</option>
+                                    <option value="Singapore">Singapore</option>
+                                    <option value="Kaohsiung">Kaohsiung</option>
+                                    <option value="Jakarta">Jakarta</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="portDestination">Port of Destination</label>
+                                <select class="form-control" id="portDestination" required>
+                                    <option value="">Select Port of Destination</option>
+                                    <option value="Manila">Manila</option>
+                                    <option value="Cebu">Cebu</option>
+                                    <option value="Davao">Davao</option>
+                                    <option value="Iloilo">Iloilo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Special Instructions -->
+                    <div class="form-section">
+                        <h2 class="form-section-title">Special Instructions</h2>
+                        <div class="form-group">
+                            <label class="form-label" for="handlingInstructions">Handling Instructions</label>
+                            <textarea class="form-control" id="handlingInstructions" rows="4"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Submanifest
+                    </button>
+
+                    <!-- Document Cards Section -->
+                    <div class="document-types">
+                        <div class="document-type-card" id="billOfLadingCard" style="cursor:pointer;">
+                            <i class="fas fa-file-alt document-type-icon"></i>
+                            <div class="document-type-title">Bill of Lading</div>
+                            <div class="document-type-desc">Transport document that serves as a receipt of goods, evidence of the contract of carriage, and a document of title.</div>
+                        </div>
+                        
+                        <div class="document-type-card" id="commercialInvoiceCard" style="cursor:pointer;">
+                            <i class="fas fa-file-invoice-dollar document-type-icon"></i>
+                            <div class="document-type-title">Commercial Invoice</div>
+                            <div class="document-type-desc">Document containing details of the sale transaction including item, quantity, and value.</div>
+                        </div>
+                        
+                        <div class="document-type-card" id="packingListCard" style="cursor:pointer;">
+                            <i class="fas fa-list-ol document-type-icon"></i>
+                            <div class="document-type-title">Packing List</div>
+                            <div class="document-type-desc">Document detailing the contents of a shipment, including item counts, dimensions, and weights.</div>
+                        </div>
+                        
+                        <div class="document-type-card" id="certificateOriginCard" style="cursor:pointer;">
+                            <i class="fas fa-certificate document-type-icon"></i>
+                            <div class="document-type-title">Certificate of Origin</div>
+                            <div class="document-type-desc">Document certifying the country of origin of the goods being shipped.</div>
+                        </div>
+                        <div class="document-type-card others-card" id="othersCard" style="cursor:pointer;">
+                            <i class="fas fa-ellipsis-h document-type-icon"></i>
+                            <div class="document-type-title">Others</div>
+                            <div class="document-type-desc">Other supporting documents as required for the shipment.</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(10,31,68,0.25); z-index:9999; align-items:center; justify-content:center;">
+        <div style="background:white; border-radius:12px; max-width:90vw; width:350px; margin:auto; box-shadow:0 8px 32px rgba(10,31,68,0.18); padding:2rem 1.5rem; text-align:center; position:relative;">
+            <button id="closeModalBtn" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.2rem; color:#6B7280; cursor:pointer;">
+                <i class="fas fa-times"></i>
+            </button>
+            <div style="margin-bottom:1.2rem;">
+                <i class="fas fa-check-circle" style="color:var(--accent); font-size:2.5rem;"></i>
+            </div>
+            <h3 style="font-family:'Exo 2',sans-serif; font-size:1.2rem; color:var(--primary); margin-bottom:0.5rem;">Submanifest Saved!</h3>
+            <p style="color:var(--dark-gray); font-size:1rem;">Your shipment details have been successfully saved.</p>
+            <button id="modalOkBtn" class="btn-submit" style="margin-top:1.5rem; width:100%; justify-content:center;">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <!-- Others Modal -->
+    <div id="othersModal" class="custom-modal-bg" style="display:none;">
+      <div class="custom-modal">
+        <button class="custom-modal-close" id="closeOthersModal" title="Close"><i class="fas fa-times"></i></button>
+        <h3 class="custom-modal-title">Upload Other Document</h3>
+        <div class="custom-modal-body">
+          <label for="otherDocLabel" class="custom-modal-label">Label</label>
+          <input type="text" id="otherDocLabel" class="custom-modal-input" placeholder="Enter document label...">
+          <div class="custom-modal-upload" style="flex-direction: row; align-items: center; gap: 0.7rem;">
+            <label for="otherDocFile" class="custom-modal-upload-label" style="height: 42px; display: flex; align-items: center; margin-bottom: 0;">
+              <i class="fas fa-upload"></i> Upload file/s
+            </label>
+            <input type="file" id="otherDocFile" class="custom-modal-file" multiple style="display:none;">
+            <button type="button" id="submitOtherDocBtn" class="custom-modal-submit-btn" style="background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 0.6rem 1.2rem; font-family: 'Exo 2', sans-serif; font-weight: 500; font-size: 0.97rem; cursor: pointer; transition: background 0.2s; height: 42px; display: flex; align-items: center;">
+              <i class="fas fa-paper-plane"></i> Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload Modals for Main Documents -->
+    <div id="uploadModal" class="custom-modal-bg" style="display:none;">
+      <div class="custom-modal">
+        <button class="custom-modal-close" id="closeUploadModal" title="Close"><i class="fas fa-times"></i></button>
+        <h3 class="custom-modal-title" id="uploadModalTitle">Upload Document</h3>
+        <div class="custom-modal-body">
+          <div class="custom-modal-upload" style="flex-direction: row; align-items: center; gap: 0.7rem;">
+            <label for="mainDocFile" class="custom-modal-upload-label" style="height: 42px; display: flex; align-items: center; margin-bottom: 0;">
+              <i class="fas fa-upload"></i> Upload file/s
+            </label>
+            <input type="file" id="mainDocFile" class="custom-modal-file" multiple style="display:none;">
+            <button type="button" id="submitMainDocBtn" class="custom-modal-submit-btn" style="background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 0.6rem 1.2rem; font-family: 'Exo 2', sans-serif; font-weight: 500; font-size: 0.97rem; cursor: pointer; transition: background 0.2s; height: 42px; display: flex; align-items: center;">
+              <i class="fas fa-paper-plane"></i> Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script src="js/submit-shipmentt.js"></script>
+</body>
+</html> 

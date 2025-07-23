@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Custom Clearance | Smart Port</title>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0A1F44;
+            --secondary: #1E3A8A;
+            --accent: #2D9C5A;
+            --danger: #D14343;
+            --warning: #F59E0B;
+            --info: #3B82F6;
+            --highlight: #D4AF37;
+            --light-blue: #4682B4;
+            --lighter-blue: #8CA6DB;
+            --light: #F5F5F5;
+            --gray: #E5E7EB;
+            --dark-gray: #6B7280;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light);
+            color: var(--primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 600;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 1rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: width 0.3s ease;
+            z-index: 100;
+        }
+        
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: padding 0.3s ease;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            transition: flex-direction 0.3s ease, align-items 0.3s ease;
+        }
+        
+        .logo-icon {
+            font-size: 1.8rem;
+            margin-right: 0.8rem;
+            color: var(--highlight);
+        }
+        
+        .logo-text {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            white-space: nowrap;
+            margin-right: 1rem;
+        }
+        
+        .collapse-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.4rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            padding: 0.4rem;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .collapse-btn:hover {
+            opacity: 1;
+        }
+        
+        .sidebar-collapsed .sidebar-header {
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .sidebar-collapsed .logo {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .sidebar-collapsed .logo-text {
+            display: none;
+        }
+        
+        .sidebar-collapsed .logo-icon {
+            margin-right: 0;
+            margin-top: 3rem;
+            margin-bottom: 0;
+            font-size: 1.8rem;
+        }
+        
+        .sidebar-collapsed .collapse-btn {
+            position: absolute;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 0;
+            order: -1;
+            padding: 0.2rem;
+        }
+        
+        .nav-menu {
+            list-style: none;
+        }
+        
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .nav-link i {
+            font-size: 1.1rem;
+            margin-right: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+                        /* Commented out chevron styles        .nav-link .fa-chevron-down {            font-size: 0.8rem;            margin-left: auto;            transition: transform 0.3s ease;        }        */
+        
+        .sub-menu {
+            list-style: none;
+            padding-left: 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .sub-menu.open {
+            max-height: 500px; 
+        }
+        
+        .sub-menu .nav-link {
+            padding: 0.6rem 0.8rem;
+            font-size: 0.9rem;
+        }
+        
+        .sub-menu .nav-link i {
+            font-size: 0.9rem;
+            margin-right: 0.8rem;
+        }
+        
+        .sidebar-collapsed .sub-menu {
+            display: none; 
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 0 1.5rem 1.5rem;
+            transition: margin-left 0.3s ease, width 0.3s ease;
+            min-height: 100vh;
+            width: calc(100% - 250px);
+        }
+        
+        .main-content.expanded {
+            margin-left: 80px;
+            width: calc(100% - 80px);
+        }
+        
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 10;
+            margin: 0 -1.5rem 1.5rem -1.5rem;
+        }
+        
+        .search-bar {
+            position: relative;
+            width: 300px;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 0.7rem 1rem 0.7rem 2.5rem;
+            border: 1px solid var(--gray);
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--light-blue);
+            box-shadow: 0 0 0 3px rgba(70, 130, 180, 0.2);
+        }
+        
+        .search-bar i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-gray);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+        
+        .notification-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-right: 1.5rem;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.8rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .user-name {
+            font-weight: 500;
+            margin-right: 0.5rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray);
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--light-blue);
+            box-shadow: 0 0 0 3px rgba(70, 130, 180, 0.2);
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray);
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236B7280' viewBox='0 0 16 16'%3E%3Cpath d='M8 11.5l-5.5-5.5h11z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+        }
+        
+        .form-select:focus {
+            outline: none;
+            border-color: var(--light-blue);
+            box-shadow: 0 0 0 3px rgba(70, 130, 180, 0.2);
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -1rem;
+            margin-left: -1rem;
+        }
+        
+        .form-col {
+            flex: 0 0 50%;
+            max-width: 50%;
+            padding-right: 1rem;
+            padding-left: 1rem;
+            box-sizing: border-box;
+        }
+        
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-upload-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            border: 1px dashed var(--gray);
+            border-radius: 6px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-upload-label:hover {
+            border-color: var(--light-blue);
+            background-color: rgba(70, 130, 180, 0.05);
+        }
+        
+        .file-upload-icon {
+            font-size: 2rem;
+            color: var(--light-blue);
+            margin-right: 1rem;
+        }
+        
+        .file-upload-text {
+            flex: 1;
+        }
+        
+        .file-upload-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .file-upload-subtitle {
+            font-size: 0.85rem;
+            color: var(--dark-gray);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            text-decoration: none;
+            font-size: 0.95rem;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+        
+        .btn-success {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #248a4a;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(10, 31, 68, 0.1);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #b03636;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-title h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .page-title p {
+            font-size: 0.95rem;
+            color: var(--dark-gray);
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+            
+            .logo-text {
+                display: none;
+            }
+            
+            .nav-link span {
+                display: none;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .form-col {
+                flex: 0 0 100%;
+                max-width: 100%;
+                margin-bottom: 1rem;
+            }
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="../shipper-dashboard.html" class="logo" style="text-decoration: none; color: white;">
+                    <i class="fas fa-anchor logo-icon"></i>
+                    <span class="logo-text">Smart Port</span>
+                </a>
+                <button class="collapse-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link" data-target-submenu="vesselsSubMenu">
+                        <i class="fas fa-ship"></i>
+                        <span>Vessels</span>
+                    </a>
+                    <ul class="sub-menu" id="vesselsSubMenu">
+                        <li><a href="../vessels/view-vessels.html" class="nav-link"><i class="fas fa-list-ul"></i><span>View All Vessels</span></a></li>
+                        <li><a href="../vessels/request-vessel-info.html" class="nav-link"><i class="fas fa-question-circle"></i><span>Request Vessel Info</span></a></li>
+                        <li><a href="../vessels/confirm-cargo-delivery.html" class="nav-link"><i class="fas fa-check-circle"></i><span>Confirm Cargo Delivery</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link" data-target-submenu="reportsSubMenu">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports</span>
+                    </a>
+                    <ul class="sub-menu" id="reportsSubMenu">
+                        <li><a href="../reports/view-incident-feed.html" class="nav-link"><i class="fas fa-stream"></i><span>View Incident Feed</span></a></li>
+                        <li><a href="../reports/submit-incident-report.html" class="nav-link"><i class="fas fa-file-medical-alt"></i><span>Submit Incident Report</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link active" data-target-submenu="shippingDetailsSubMenu">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Shipping Details</span>
+                    </a>
+                    <ul class="sub-menu open" id="shippingDetailsSubMenu">
+                        <li><a href="../shipping-details/view-shipments.html" class="nav-link"><i class="fas fa-list-alt"></i><span>Shipment History</span></a></li>
+                        <li><a href="../shipping-details/submit-shipment.html" class="nav-link"><i class="fas fa-edit"></i><span>Submit Shipment</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link active" data-target-submenu="customClearanceSubMenu">
+                        <i class="fas fa-clipboard-check"></i>
+                        <span>Custom Clearance</span>
+                    </a>
+                    <ul class="sub-menu open" id="customClearanceSubMenu">
+                        <li><a href="view-custom-clearance.html" class="nav-link active"><i class="fas fa-eye"></i><span>Clearance Status</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../../index.html" class="nav-link">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="topbar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+                
+                <div class="user-menu">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    
+                    <div class="user-profile">
+                        <div class="user-avatar">SH</div>
+                        <span class="user-name">Shipper User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page Content -->
+            <div class="dashboard-content">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1>Custom Clearance</h1>
+                        <p>Submit or update customs clearance information for a shipment.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <form id="customClearanceForm">
+                        <h3 class="mb-4">Clearance Details</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="clearanceId" class="form-label">Clearance ID</label>
+                                    <input type="text" id="clearanceId" class="form-control" placeholder="Auto-generated or enter existing ID" >
+                                    <small class="text-muted">Leave blank for new submission or enter ID to update.</small>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="shipmentId" class="form-label">Shipment ID</label>
+                                    <select id="shipmentId" class="form-select" required>
+                                        <option value="" selected disabled>Select Shipment ID</option>
+                                        <option value="SHP001">SHP001 - Hong Kong to Manila</option>
+                                        <option value="SHP002">SHP002 - Singapore to Cebu</option>
+                                        <option value="SHP003">SHP003 - Kaohsiung to Davao</option>
+                                        <option value="SHP004">SHP004 - Jakarta to Iloilo</option>
+                                        <option value="SHP005">SHP005 - Hong Kong to Manila</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="declarationType" class="form-label">Declaration Type</label>
+                                    <select id="declarationType" class="form-select" required>
+                                        <option value="" selected disabled>Select Type</option>
+                                        <option value="import">Import Declaration</option>
+                                        <option value="export">Export Declaration</option>
+                                        <option value="transit">Transit Declaration</option>
+                                    </select>
+                                </div>
+                            </div>
+                             <div class="form-col">
+                                <div class="form-group">
+                                    <label for="portOfEntry" class="form-label">Port of Entry/Exit</label>
+                                    <select id="portOfEntry" class="form-select" required>
+                                        <option value="" selected disabled>Select Port</option>
+                                        <option value="Manila">Manila</option>
+                                        <option value="Cebu">Cebu</option>
+                                        <option value="Davao">Davao</option>
+                                        <option value="Iloilo">Iloilo</option>
+                                        <option value="Subic">Subic</option>
+                                        <option value="Batangas">Batangas</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 class="mt-5 mb-4">Goods Information</h3>
+                         <div class="form-group">
+                            <label for="goodsDescription" class="form-label">Detailed Description of Goods</label>
+                            <textarea id="goodsDescription" class="form-control" placeholder="Provide a full description of the items being shipped" required></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="hsCode" class="form-label">HS Code (Harmonized System)</label>
+                                    <input type="text" id="hsCode" class="form-control" placeholder="e.g., 8517.12" required>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="countryOfOrigin" class="form-label">Country of Origin</label>
+                                    <input type="text" id="countryOfOrigin" class="form-control" placeholder="e.g., China" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="declaredValue" class="form-label">Declared Value (USD)</label>
+                                    <input type="number" id="declaredValue" class="form-control" placeholder="Enter total value" required>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                 <div class="form-group">
+                                    <label for="currency" class="form-label">Currency</label>
+                                    <select id="currency" class="form-select" required>
+                                        <option value="USD" selected>USD - United States Dollar</option>
+                                        <option value="EUR">EUR - Euro</option>
+                                        <option value="JPY">JPY - Japanese Yen</option>
+                                        <option value="CNY">CNY - Chinese Yuan Renminbi</option>
+                                        <option value="PHP">PHP - Philippine Peso</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="totalWeight" class="form-label">Total Gross Weight (kg)</label>
+                                    <input type="number" id="totalWeight" class="form-control" placeholder="Enter total weight" required>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="totalPackages" class="form-label">Number of Packages</label>
+                                    <input type="number" id="totalPackages" class="form-control" placeholder="Enter number of packages" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 class="mt-5 mb-4">Parties Involved</h3>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="importerExporterName" class="form-label">Importer/Exporter Name</label>
+                                    <input type="text" id="importerExporterName" class="form-control" placeholder="Full legal name" required>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="importerExporterAddress" class="form-label">Importer/Exporter Address</label>
+                                    <input type="text" id="importerExporterAddress" class="form-control" placeholder="Full address" required>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="brokerName" class="form-label">Customs Broker Name (Optional)</label>
+                                    <input type="text" id="brokerName" class="form-control" placeholder="Broker's name if applicable">
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="brokerLicense" class="form-label">Broker License No. (Optional)</label>
+                                    <input type="text" id="brokerLicense" class="form-control" placeholder="Broker's license number">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="mt-5 mb-4">Required Documents</h3>
+                        <div class="form-group">
+                            <label class="form-label">Upload Supporting Documents</label>
+                            <p class="text-muted mb-2">Attach documents like Bill of Lading, Commercial Invoice, Packing List, Certificates of Origin, Permits, etc.</p>
+                            <div class="file-upload">
+                                <input type="file" id="clearanceDocs" class="file-upload-input" multiple>
+                                <div class="file-upload-label">
+                                    <i class="fas fa-file-import file-upload-icon"></i>
+                                    <div class="file-upload-text">
+                                        <div class="file-upload-title">Upload Clearance Documents</div>
+                                        <div class="file-upload-subtitle">Drag & drop or click to browse (PDF, DOCX, JPG, PNG)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="fileList" class="mt-2"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="additionalNotes" class="form-label">Additional Notes or Instructions</label>
+                            <textarea id="additionalNotes" class="form-control" placeholder="Any special instructions for customs, or remarks."></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="reset" class="btn btn-danger">Reset Form</button>
+                            <button type="submit" class="btn btn-success">Submit Clearance</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Sidebar collapse functionality
+        const collapseBtn = document.querySelector('.collapse-btn');
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+        
+        collapseBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('sidebar-collapsed');
+            mainContent.classList.toggle('expanded');
+            // Basic localStorage persistence for sidebar state can be added here if needed
+            // localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('sidebar-collapsed'));
+        });
+        
+        // Generalized Submenu functionality
+        document.querySelectorAll('.nav-item.has-submenu > .nav-link').forEach(mainLink => {
+            const subMenuId = mainLink.dataset.targetSubmenu;
+            const subMenu = document.getElementById(subMenuId);
+            
+            if (!subMenu) { 
+                return; 
+            }
+
+            let isAnySubLinkActive = false;
+            subMenu.querySelectorAll('.nav-link.active').forEach(() => {
+                isAnySubLinkActive = true;
+            });
+
+            if (mainLink.classList.contains('active') || isAnySubLinkActive) {
+                if (isAnySubLinkActive && !mainLink.classList.contains('active')) {
+                    mainLink.classList.add('active');
+                }
+                mainLink.classList.add('open');
+                subMenu.classList.add('open');
+                subMenu.style.maxHeight = subMenu.scrollHeight + "px";
+            }
+
+            mainLink.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                const clickedMainLink = mainLink;
+                const clickedSubMenu = subMenu;
+
+                const isClickedSubMenuAlreadyOpen = clickedSubMenu.classList.contains('open');
+
+                document.querySelectorAll('.nav-item.has-submenu > .nav-link').forEach(otherML => {
+                    if (otherML !== clickedMainLink) {
+                        otherML.classList.remove('active'); 
+                        otherML.classList.remove('open');
+                        const otherSM_id = otherML.dataset.targetSubmenu;
+                        const otherSM = document.getElementById(otherSM_id);
+                        if (otherSM) {
+                            otherSM.classList.remove('open');
+                            otherSM.style.maxHeight = null;
+                        }
+                    }
+                });
+                
+                clickedMainLink.classList.add('active');
+
+                if (isClickedSubMenuAlreadyOpen) {
+                    clickedMainLink.classList.remove('open');
+                    clickedSubMenu.classList.remove('open');
+                    clickedSubMenu.style.maxHeight = null;
+                } else {
+                    clickedMainLink.classList.add('open');
+                    clickedSubMenu.classList.add('open');
+                    clickedSubMenu.style.maxHeight = clickedSubMenu.scrollHeight + "px";
+                }
+            });
+        });
+        
+        // File upload styling and list
+        const clearanceDocsInput = document.getElementById('clearanceDocs');
+        const fileListContainer = document.getElementById('fileList');
+        
+        clearanceDocsInput.addEventListener('change', function(e) {
+            const files = this.files;
+            const uploadLabel = this.parentElement.querySelector('.file-upload-label');
+            const titleElem = uploadLabel.querySelector('.file-upload-title');
+
+            fileListContainer.innerHTML = ''; // Clear previous list
+
+            if (files.length > 0) {
+                uploadLabel.style.borderStyle = 'solid';
+                uploadLabel.style.borderColor = 'var(--accent)';
+                if (titleElem) titleElem.textContent = files.length > 1 ? `${files.length} files selected` : files[0].name;
+
+                const list = document.createElement('ul');
+                list.style.listStyle = 'none';
+                list.style.paddingLeft = '0';
+                for (let i = 0; i < files.length; i++) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = files[i].name;
+                    listItem.style.fontSize = '0.9rem';
+                    listItem.style.color = 'var(--dark-gray)';
+                    list.appendChild(listItem);
+                }
+                fileListContainer.appendChild(list);
+
+            } else {
+                 if (titleElem) titleElem.textContent = 'Upload Clearance Documents';
+                 uploadLabel.style.borderStyle = 'dashed';
+                 uploadLabel.style.borderColor = 'var(--gray)';
+            }
+        });
+        
+        // Form submission
+        document.getElementById('customClearanceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Add actual form submission logic here (e.g., AJAX request)
+            alert('Customs clearance information submitted successfully!');
+            this.reset();
+            clearanceDocsInput.dispatchEvent(new Event('change')); // To reset file input visuals
+        });
+
+        // Auto-open Custom Clearance submenu as this is an active page
+        const customClearanceLink = document.querySelector('.nav-link[data-target-submenu="customClearanceSubMenu"]');
+        const customClearanceSubMenu = document.getElementById('customClearanceSubMenu');
+        if(customClearanceLink && customClearanceSubMenu && customClearanceLink.classList.contains('active')) {
+            customClearanceLink.classList.add('open');
+            customClearanceSubMenu.classList.add('open');
+            customClearanceSubMenu.style.maxHeight = customClearanceSubMenu.scrollHeight + "px";
+        }
+
+    </script>
+</body>
+</html> 

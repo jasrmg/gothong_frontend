@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Incident Feed | Smart Port</title>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/view-incident.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="../shipper-dashboard.html" class="logo" style="text-decoration: none; color: white;">
+                    <i class="fas fa-anchor logo-icon"></i>
+                    <span class="logo-text">Smart Port</span>
+                </a>
+                <button class="collapse-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="../shipper-dashboard.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link" data-target-submenu="vesselsSubMenu">
+                        <i class="fas fa-ship"></i>
+                        <span>Vessels</span>
+                    </a>
+                    <ul class="sub-menu" id="vesselsSubMenu">
+                        <li><a href="../vessels/view-vessels.html" class="nav-link"><i class="fas fa-list-ul"></i><span>View All Vessels</span></a></li>
+                        <li><a href="../vessels/request-vessel-info.html" class="nav-link"><i class="fas fa-question-circle"></i><span>Request Vessel Info</span></a></li>
+                        <li><a href="../vessels/confirm-cargo-delivery.html" class="nav-link"><i class="fas fa-check-circle"></i><span>Confirm Cargo Delivery</span></a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link" data-target-submenu="shippingDetailsSubMenu">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Shipping Details</span>
+                    </a>
+                    <ul class="sub-menu" id="shippingDetailsSubMenu">
+                        <li><a href="../shipping-details/view-shipments.html" class="nav-link"><i class="fas fa-list-alt"></i><span>Shipment History</span></a></li>
+                        <li><a href="../shipping-details/submit-shipment.html" class="nav-link"><i class="fas fa-edit"></i><span>Submit Shipment</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link" data-target-submenu="customClearanceSubMenu">
+                        <i class="fas fa-clipboard-check"></i>
+                        <span>Custom Clearance</span>
+                    </a>
+                    <ul class="sub-menu" id="customClearanceSubMenu">
+                        <li><a href="../custom-clearance/view-custom-clearance.html" class="nav-link"><i class="fas fa-eye"></i><span>Clearance Status</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link active" data-target-submenu="reportsSubMenu">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports</span>
+                    </a>
+                    <ul class="sub-menu open" id="reportsSubMenu">
+                        <li><a href="view-incident-feed.html" class="nav-link active"><i class="fas fa-stream"></i><span>View Incident Feed</span></a></li>
+                        <li><a href="submit-incident-report.html" class="nav-link"><i class="fas fa-file-medical-alt"></i><span>Submit Incident Report</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../../index.html" class="nav-link">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="topbar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search incidents...">
+                </div>
+                
+                <div class="user-menu">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">2</span>
+                    </button>
+                    
+                    <div class="user-profile">
+                        <div class="user-avatar">SH</div>
+                        <span class="user-name">Shipper User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/view-incident.js"></script>
+</body>
+</html> 

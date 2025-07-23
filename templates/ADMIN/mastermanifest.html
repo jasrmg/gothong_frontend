@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Master Manifest - A4</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #0a1f44;
+        --secondary: #1e3a8a;
+        --accent: #2d9c5a;
+        --danger: #d14343;
+        --highlight: #d4af37;
+        --light-blue: #4682b4;
+        --lighter-blue: #8ca6db;
+        --light: #f5f5f5;
+        --gray: #e5e7eb;
+        --dark-gray: #6b7280;
+        --warning: #f59e0b;
+        --success: #10b981;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background-color: var(--light);
+        margin: 0;
+        padding: 40px;
+      }
+
+      .a4-wrapper {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 20mm auto;
+        padding: 20mm;
+        background: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+      }
+
+      h1 {
+        font-size: 22px;
+        border-bottom: 2px solid var(--gray);
+        padding-bottom: 8px;
+        color: var(--secondary);
+      }
+
+      .section {
+        margin-top: 20px;
+      }
+
+      .section h2 {
+        font-size: 16px;
+        color: var(--accent);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .info-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .info-box {
+        flex: 1 1 45%;
+        background-color: var(--gray);
+        padding: 8px;
+        border-radius: 4px;
+        font-size: 13px;
+      }
+
+      .info-box strong {
+        color: var(--dark-gray);
+        display: block;
+        font-size: 12px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+        font-size: 13px;
+      }
+
+      th,
+      td {
+        padding: 8px;
+        border: 1px solid var(--gray);
+        text-align: left;
+      }
+
+      th {
+        background-color: var(--primary);
+        color: white;
+      }
+
+      .notes {
+        background-color: var(--gray);
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 13px;
+      }
+
+      .actions {
+        margin-top: 20px;
+        text-align: right;
+      }
+
+      .btn {
+        background-color: var(--primary);
+        color: white;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 4px;
+        margin-left: 10px;
+        cursor: pointer;
+      }
+
+      @media print {
+        .actions {
+          display: none !important;
+        }
+
+        @page {
+          size: A4 portrait;
+          margin: 20mm;
+        }
+
+        body {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .a4-wrapper {
+          box-shadow: none;
+          margin: 0;
+        }
+      }
+
+      .back-button {
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        color: var(--secondary);
+        font-weight: 500;
+        margin-bottom: 15px;
+        transition: all 0.2s ease;
+      }
+
+      .back-button:hover {
+        color: var(--primary);
+      }
+
+      .back-button i {
+        margin-right: 8px;
+        font-size: 1.1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="manifest.html" class="back-button no-print">
+      <i class="fas fa-arrow-left"></i> Back to Manifests
+    </a>
+    <div class="a4-wrapper" id="masterManifest">
+      <h1>
+        <i class="fa-solid fa-clipboard-list"></i> Master Manifest —
+        MM-20250716-001
+      </h1>
+
+      <div class="section">
+        <h2><i class="fa-solid fa-ship"></i> Voyage & Vessel Info</h2>
+        <div class="info-grid">
+          <div class="info-box"><strong>Voyage No.</strong> VY-001</div>
+          <div class="info-box">
+            <strong>Vessel Name</strong> MV Pacific Star
+          </div>
+          <div class="info-box"><strong>Departure</strong> Manila</div>
+          <div class="info-box"><strong>Arrival</strong> Cebu</div>
+          <div class="info-box">
+            <strong>ETA</strong> July 20, 2025 — 09:00 AM
+          </div>
+          <div class="info-box">
+            <strong>Departure Date</strong> July 18, 2025 — 03:00 PM
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2><i class="fa-solid fa-boxes-packing"></i> Submanifests (2)</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Submanifest No.</th>
+              <th>Shipper</th>
+              <th>Consignee</th>
+              <th>Container No.</th>
+              <th>Items</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>SUBM-20250716-001</td>
+              <td>Juan Dela Cruz</td>
+              <td>Maria Santos</td>
+              <td>MSKU1234567</td>
+              <td>2</td>
+              <td>
+                <span style="color: var(--success); font-weight: bold"
+                  >Approved</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>SUBM-20250716-002</td>
+              <td>Carlos Reyes</td>
+              <td>Anna Villanueva</td>
+              <td>APL99887766</td>
+              <td>3</td>
+              <td>
+                <span style="color: var(--success); font-weight: bold"
+                  >Approved</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2><i class="fa-solid fa-file"></i> Attached Documents</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Submanifest No.</th>
+              <th>Document</th>
+              <th>Uploaded By</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>SUBM-20250716-001</td>
+              <td>Bill of Lading</td>
+              <td>Juan Dela Cruz</td>
+              <td>July 16, 2025</td>
+            </tr>
+            <tr>
+              <td>SUBM-20250716-002</td>
+              <td>Invoice</td>
+              <td>Carlos Reyes</td>
+              <td>July 16, 2025</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2><i class="fa-solid fa-clipboard-check"></i> Remarks</h2>
+        <div class="notes">
+          All submanifests verified and approved. Ready for customs clearance.
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" onclick="window.print()">
+          <i class="fas fa-print"></i> Print
+        </button>
+        <button class="btn" id="downloadPDF">
+          <i class="fas fa-file-pdf"></i> Download PDF
+        </button>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+      document.getElementById("downloadPDF").addEventListener("click", () => {
+        html2pdf()
+          .set({
+            margin: 0.5,
+            filename: "master-manifest.pdf",
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+          })
+          .from(document.getElementById("masterManifest"))
+          .save();
+      });
+    </script>
+  </body>
+</html>

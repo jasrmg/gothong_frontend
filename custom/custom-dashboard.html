@@ -1,222 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Customs Dashboard | Smart Port</title>
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="stylesheet" href="custom-dashboard.css"/>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <link rel="stylesheet" href="custom-dashboard.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      </head>
-    <body>
+  </head>
+  <body>
     <div class="container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <a href="#" class="logo" style="text-decoration: none; color: white;">
-                    <i class="fas fa-anchor logo-icon"></i>
-                    <span class="logo-text">Smart Port</span>
-                </a>
-                <button class="collapse-btn">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-            
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="custom-dashboard.html" class="nav-link active" data-target-submenu="dashboardSubMenu">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item has-submenu">
-                    <a href="submanifest-review.html" class="nav-link" data-target-submenu="manifestoSubMenu">
-                        <i class="fas fa-file-alt"></i>
-                        <span>Submanifest Review</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-cog"></i>
-                        <span>Settings</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="../index.html" class="nav-link">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Logout</span>
-                    </a>
-                </li>
-            </ul>
-        </aside>
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <a href="#" class="logo" style="text-decoration: none; color: white">
+            <i class="fas fa-anchor logo-icon"></i>
+            <span class="logo-text">Smart Port</span>
+          </a>
+          <button class="collapse-btn">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Top Bar -->
-            <div class="topbar">
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search...">
-                </div>
-                
-                <div class="user-menu">
-                    <button class="notification-btn">
-                        <i class="fas fa-bell"></i>
-                    </button>
-                    
-                    <div class="user-profile">
-                        <div class="user-avatar">CO</div>
-                        <span class="user-name">Customs Officer</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                </div>
-            </div>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a
+              href="custom-dashboard.html"
+              class="nav-link active"
+              data-target-submenu="dashboardSubMenu"
+            >
+              <i class="fas fa-tachometer-alt"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item has-submenu">
+            <a
+              href="submanifest-review.html"
+              class="nav-link"
+              data-target-submenu="manifestoSubMenu"
+            >
+              <i class="fas fa-file-alt"></i>
+              <span>Submanifest Review</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-cog"></i>
+              <span>Settings</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="../index.html" class="nav-link">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </li>
+        </ul>
+      </aside>
 
-            <div class="notification-dropdown hidden">
-    <div class="notification-header">
-        <strong>Notifications</strong>
-        <span class="mark-read">Mark all as read</span>
-    </div>
-    <ul class="notification-list">
-        <li class="notification-item unread">
-            <i class="fas fa-file-alt"></i>
-            <div class="notification-info">
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Top Bar -->
+        <div class="topbar">
+          <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search..." />
+          </div>
+
+          <div class="user-menu">
+            <button class="notification-btn">
+              <i class="fas fa-bell"></i>
+            </button>
+
+            <div class="user-profile">
+              <div class="user-avatar">CO</div>
+              <span class="user-name">Customs Officer</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="notification-dropdown hidden">
+          <div class="notification-header">
+            <strong>Notifications</strong>
+            <span class="mark-read">Mark all as read</span>
+          </div>
+          <ul class="notification-list">
+            <li class="notification-item unread">
+              <i class="fas fa-file-alt"></i>
+              <div class="notification-info">
                 <p>New submanifest submitted</p>
                 <small>2 minutes ago</small>
-            </div>
-        </li>
-        <li class="notification-item">
-            <i class="fas fa-check-circle"></i>
-            <div class="notification-info">
+              </div>
+            </li>
+            <li class="notification-item">
+              <i class="fas fa-check-circle"></i>
+              <div class="notification-info">
                 <p>Submanifest CL-2023-5419 approved</p>
                 <small>1 hour ago</small>
-            </div>
-        </li>
-        <li class="notification-item">
-            <i class="fas fa-times-circle"></i>
-            <div class="notification-info">
+              </div>
+            </li>
+            <li class="notification-item">
+              <i class="fas fa-times-circle"></i>
+              <div class="notification-info">
                 <p>Submanifest CL-2023-5418 rejected</p>
                 <small>3 hours ago</small>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+          <div class="page-header">
+            <div class="page-title">
+              <h1>Customs Dashboard</h1>
+              <p>
+                Welcome back! Manage customs clearance and shipping compliance.
+              </p>
             </div>
-        </li>
-    </ul>
-</div>
+          </div>
 
-            
-            <!-- Dashboard Content -->
-            <div class="dashboard-content">
-                <div class="page-header">
-                    <div class="page-title">
-                        <h1>Customs Dashboard</h1>
-                        <p>Welcome back! Manage customs clearance and shipping compliance.</p>
-                    </div>
+          <!-- Stats Cards -->
+          <div class="dashboard-grid">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Submanifest Pending</h3>
+                <div class="card-icon blue">
+                  <i class="fas fa-file-alt"></i>
                 </div>
-                
-                <!-- Stats Cards -->
-                <div class="dashboard-grid">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Submanifest Pending</h3>
-                            <div class="card-icon blue">
-                                <i class="fas fa-file-alt"></i>
-                            </div>
-                        </div>
-                        <div class="card-value">12</div>
-                        
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Submanifest Rejected</h3>
-                            <div class="card-icon red">
-                                <i class="fas fa-times"></i>
-                            </div>
-                        </div>
-                        <div class="card-value">3</div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Submanifest Cleared</h3>
-                            <div class="card-icon gold">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                        </div>
-                        <div class="card-value">15</div>
-                    </div>
-                </div>
-                
-                <!-- Recent Clearance Requests Section -->
-                <div class="section">
-                    <div class="section-header">
-                        <h2 class="section-title">Recent Clearance Requests</h2>
-                        <a class="btn btn-outline" href="submanifest-review.html">View All</a>
+              </div>
+              <div class="card-value">12</div>
+            </div>
 
-                    </div>
-                    
-                    <div class="table-responsive">
-                        <table class="custom-table">
-                            <thead>
-                                <tr>
-                                    <th>Submanifest ID</th>
-                                    <th>Consignee Name</th>
-                                    <th>Submitted By</th>
-                                    <th>Date Submitted</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>CL-2023-5421</td>
-                                    <td>SHP001-Electronics</td>
-                                    <td>Manila Bay Express</td>
-                                    <td>May 15, 2023</td>
-                                    <td><span class="status-badge pending">Pending</span></td>
-                                    <td>
-                                        <button class="btn btn-outline">Review</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>CL-2023-5422</td>
-                                    <td>SHP002-Textiles</td>
-                                    <td>Cebu Pearl</td>
-                                    <td>May 16, 2023</td>
-                                    <td><span class="status-badge under-review">Under Review</span></td>
-                                    <td>
-                                        <button class="btn btn-outline">Review</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>CL-2023-5419</td>
-                                    <td>SHP003-Machinery</td>
-                                    <td>Philippines Pioneer</td>
-                                    <td>May 14, 2023</td>
-                                    <td><span class="status-badge approved">Approved</span></td>
-                                    <td>
-                                        <button class="btn btn-outline">View</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>CL-2023-5418</td>
-                                    <td>SHP004-Food Products</td>
-                                    <td>Mindanao Explorer</td>
-                                    <td>May 14, 2023</td>
-                                    <td><span class="status-badge rejected">Rejected</span></td>
-                                    <td>
-                                        <button class="btn btn-outline">View</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Submanifest Rejected</h3>
+                <div class="card-icon red">
+                  <i class="fas fa-times"></i>
                 </div>
-                </div>
-                </main>
-                </div>
-                <script src="custom-dashboard.js"></script>
+              </div>
+              <div class="card-value">3</div>
+            </div>
 
-                </body>
-          </html>
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Submanifest Cleared</h3>
+                <div class="card-icon gold">
+                  <i class="fas fa-check-circle"></i>
+                </div>
+              </div>
+              <div class="card-value">15</div>
+            </div>
+          </div>
+
+          <!-- Recent Clearance Requests Section -->
+          <div class="section">
+            <div class="section-header">
+              <h2 class="section-title">Recent Clearance Requests</h2>
+              <a class="btn btn-outline" href="submanifest-review.html"
+                >View All</a
+              >
+            </div>
+
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Submanifest ID</th>
+                    <th>Consignee Name</th>
+                    <th>Submitted By</th>
+                    <th>Date Submitted</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>CL-2023-5421</td>
+                    <td>SHP001-Electronics</td>
+                    <td>Manila Bay Express</td>
+                    <td>May 15, 2023</td>
+                    <td><span class="status-badge pending">Pending</span></td>
+                    <td>
+                      <button class="btn btn-outline">Review</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>CL-2023-5422</td>
+                    <td>SHP002-Textiles</td>
+                    <td>Cebu Pearl</td>
+                    <td>May 16, 2023</td>
+                    <td>
+                      <span class="status-badge under-review"
+                        >Under Review</span
+                      >
+                    </td>
+                    <td>
+                      <button class="btn btn-outline">Review</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>CL-2023-5419</td>
+                    <td>SHP003-Machinery</td>
+                    <td>Philippines Pioneer</td>
+                    <td>May 14, 2023</td>
+                    <td><span class="status-badge approved">Approved</span></td>
+                    <td>
+                      <button class="btn btn-outline">View</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>CL-2023-5418</td>
+                    <td>SHP004-Food Products</td>
+                    <td>Mindanao Explorer</td>
+                    <td>May 14, 2023</td>
+                    <td><span class="status-badge rejected">Rejected</span></td>
+                    <td>
+                      <button class="btn btn-outline">View</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script src="custom-dashboard.js"></script>
+  </body>
+</html>
