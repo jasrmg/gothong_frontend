@@ -170,7 +170,7 @@ document.getElementById("login").addEventListener("submit", function (e) {
       window.location.href = "admin side/admin-dashboard.html";
     } else if (email === "shipper@gmail.com" && password === "shipper123456") {
       // Redirect to shipper dashboard
-      window.location.href = "shipper side/view-vessels.html";
+      window.location.href = "templates/SHIPPER/shipper-dashboard.html";
     } else if (email === "custom@gmail.com" && password === "custom123456") {
       // Redirect to custom dashboard
       window.location.href = "custom side/custom-dashboard.html";
